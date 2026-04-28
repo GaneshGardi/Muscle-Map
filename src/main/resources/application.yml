@@ -16,10 +16,6 @@ spring:
             hibernate:
                 dialect: org.hibernate.dialect.PostgreSQLDialect
 
-    #Used for database migration in offline apps, not needed in this case.
-    # flyway:
-    #     enabled: true
-    #     baseline-on-migrate: true
 
 
 server:
