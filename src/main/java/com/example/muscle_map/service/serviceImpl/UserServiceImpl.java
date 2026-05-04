@@ -1,6 +1,7 @@
 package com.example.muscle_map.service.serviceImpl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepo userRepo;
 
+      //Add user
     @Override
     public User addUser(User user) {
   
@@ -26,17 +28,21 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+  //Get user by email
     @Override
-    public User getUserByEmail(String email) {
+    public Optional<User> getUserByEmail(String email) {
   
-        throw new UnsupportedOperationException("Unimplemented method 'getUserByEmail'");
+        return userRepo.findByEmail(email);
+        
     }
 
+    //Get all users
     @Override
     public List<User> getAllUsers() {
         return userRepo.findAll();
     }
 
+    //Get user by id
     @Override
     public User getUserById(String id) {
   
@@ -45,16 +51,34 @@ public class UserServiceImpl implements UserService {
         
     }
 
+
+    //Update user
     @Override
     public User updateUser(String id, User user) {
 
-        throw new UnsupportedOperationException("Unimplemented method 'updateUser'");
+        UUID uuid = UUID.fromString(id);
+
+        User existintgUser = userRepo.findById(uuid)
+            .orElseThrow(() -> new RuntimeException("User not found with id: " + uuid));
+
+        existintgUser.setName(user.getName());
+        existintgUser.setEmail(user.getEmail());    
+        existintgUser.setPassword(user.getPassword());
+
+        return userRepo.save(existintgUser);   
     }
 
+
+    //delete user
     @Override
     public void deleteUser(String id) {
+
+        UUID uuid = UUID.fromString(id);
         
-        throw new UnsupportedOperationException("Unimplemented method 'deleteUser'");
+       User existingUser = userRepo.findById(uuid)
+            .orElseThrow(() -> new RuntimeException("User not found with id: " + uuid));
+
+        userRepo.delete(existingUser);
     }
 
 
