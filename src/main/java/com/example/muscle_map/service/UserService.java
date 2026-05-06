@@ -1,21 +1,23 @@
 package com.example.muscle_map.service;
 
 import java.util.List;
-import java.util.Optional;
 
-import com.example.muscle_map.entity.User;
+
+import com.example.muscle_map.Dto.UserRequestDto;
+import com.example.muscle_map.Dto.UserResponseDto;
+
 
 public interface UserService {
 
-    User addUser(User user);   
+    UserResponseDto addUser(UserRequestDto userDto);
 
-    Optional<User> getUserByEmail(String email);
+    UserResponseDto getUserByEmail(String email);
 
-    List<User> getAllUsers();
+    List<UserResponseDto> getAllUsers();
 
-    User getUserById(String id);
+    UserResponseDto getUserById(String id);
 
-    User updateUser(String id, User user);
+    UserResponseDto updateUser(String id, UserRequestDto userDto);
 
     void deleteUser(String id);
 
