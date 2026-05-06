@@ -3,84 +3,100 @@ package com.example.muscle_map.service.serviceImpl;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.muscle_map.Dto.UserRequestDto;
+import com.example.muscle_map.Dto.UserResponseDto;
 import com.example.muscle_map.entity.User;
+import com.example.muscle_map.mapper.UserMapper;
 import com.example.muscle_map.repository.UserRepo;
 import com.example.muscle_map.service.UserService;
-
-import jakarta.persistence.Id;
 
 @Service
 public class UserServiceImpl implements UserService {
 
+    private final UserRepo userRepo;
 
-    @Autowired
-    private UserRepo userRepo;
-
-      //Add user
-    @Override
-    public User addUser(User user) {
-  
-        userRepo.save(user);
-        return user;
+    public UserServiceImpl(UserRepo userRepo) {
+        this.userRepo = userRepo;
     }
 
-  //Get user by email
     @Override
-    public Optional<User> getUserByEmail(String email) {
-  
-        return userRepo.findByEmail(email);
-        
+    public UserResponseDto addUser(UserRequestDto userDto) {
+
+        // Convert request DTO into entity (because DB stores entity)
+        User userEntity = UserMapper.toEntity(userDto);
+
+        // Save user into database
+        User savedUser = userRepo.save(userEntity);
+
+        // Convert saved entity into response DTO (safe response without password)
+        return UserMapper.toResponseDto(savedUser);
     }
 
-    //Get all users
     @Override
-    public List<User> getAllUsers() {
-        return userRepo.findAll();
+    public UserResponseDto getUserByEmail(String email) {
+
+        // email = email.trim();
+
+        User user = userRepo.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+
+        return UserMapper.toResponseDto(user);
     }
 
-    //Get user by id
     @Override
-    public User getUserById(String id) {
-  
+    public List<UserResponseDto> getAllUsers() {
+
+        List<User> users = userRepo.findAll();
+
+        // Convert list of entities into list of response DTOs
+        return users.stream()
+                .map(UserMapper::toResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public UserResponseDto getUserById(String id) {
         UUID uuid = UUID.fromString(id);
-        return userRepo.findById(uuid).orElseThrow(() -> new RuntimeException("User not found with id: " + id));
-        
+
+        User user = userRepo.findById(uuid)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+
+        return UserMapper.toResponseDto(user);
     }
 
-
-    //Update user
     @Override
-    public User updateUser(String id, User user) {
+    public UserResponseDto updateUser(String id, UserRequestDto userDto) {
 
         UUID uuid = UUID.fromString(id);
 
-        User existintgUser = userRepo.findById(uuid)
-            .orElseThrow(() -> new RuntimeException("User not found with id: " + uuid));
+        User existinguser = userRepo.findById(uuid)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
 
-        existintgUser.setName(user.getName());
-        existintgUser.setEmail(user.getEmail());    
-        existintgUser.setPassword(user.getPassword());
+        // Update entity fields with new values from request DTO
+        existinguser.setName(userDto.getName());
+        existinguser.setEmail(userDto.getEmail());
+        existinguser.setPassword(userDto.getPassword());
 
-        return userRepo.save(existintgUser);   
+        User updatedUser = userRepo.save(existinguser);
+
+        return UserMapper.toResponseDto(updatedUser);
+
     }
 
-
-    //delete user
     @Override
     public void deleteUser(String id) {
 
         UUID uuid = UUID.fromString(id);
-        
-       User existingUser = userRepo.findById(uuid)
-            .orElseThrow(() -> new RuntimeException("User not found with id: " + uuid));
+
+        User existingUser = userRepo.findById(uuid)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
 
         userRepo.delete(existingUser);
     }
-
-
 
 }
