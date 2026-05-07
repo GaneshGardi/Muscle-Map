@@ -1,16 +1,13 @@
 package com.example.muscle_map.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
+import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 
 
 @Entity
@@ -19,7 +16,7 @@ public class User {
 
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column(nullable = false)
@@ -38,18 +35,24 @@ public class User {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<WorkoutPlan> workoutPlans = new ArrayList<>();
+
+
+
 
     public User() {
     }
 
-    public User(UUID id, String name, String email, String password, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+
+    public List<WorkoutPlan> getWorkoutPlans() {
+        return workoutPlans;
     }
+
+    public void setWorkoutPlans(List<WorkoutPlan> workoutPlans) {
+        this.workoutPlans = workoutPlans;
+    }
+
     public UUID getId() {
         return id;
     }
@@ -88,4 +91,9 @@ public class User {
     }
 
 
+    //Helper method
+    public void addWorkoutPlan(WorkoutPlan workoutPlan){
+        this.workoutPlans.add(workoutPlan);
+        workoutPlan.setUser(this);
+    }
 }
