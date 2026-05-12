@@ -1,7 +1,10 @@
 package com.example.muscle_map.service.serviceImpl;
 
+import com.example.muscle_map.Dto.WorkoutPlanRequestDto;
+import com.example.muscle_map.Dto.WorkoutPlanResponseDto;
 import com.example.muscle_map.entity.User;
 import com.example.muscle_map.entity.WorkoutPlan;
+import com.example.muscle_map.mapper.WorkoutPlanMapper;
 import com.example.muscle_map.repository.UserRepo;
 import com.example.muscle_map.repository.WorkoutPlanRepo;
 import com.example.muscle_map.service.WorkoutPlanService;
@@ -11,33 +14,44 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class WorkoutPlanServiceImpl implements WorkoutPlanService {
 
     private final UserRepo userRepo;
     private final WorkoutPlanRepo workoutPlanRepo;
+    private final WorkoutPlanMapper mapper;
 
-    public WorkoutPlanServiceImpl(UserRepo userRepo, WorkoutPlanRepo workoutPlanRepo){
+
+    public WorkoutPlanServiceImpl(UserRepo userRepo,
+                                  WorkoutPlanRepo workoutPlanRepo,
+                                  WorkoutPlanMapper mapper
+                                  ) {
         this.userRepo = userRepo;
         this.workoutPlanRepo = workoutPlanRepo;
+        this.mapper = mapper;
+
     }
 
     @Override
     @Transactional
-    public WorkoutPlan createWorkoutPlan(WorkoutPlan workoutPlan, UUID userId) {
+    public WorkoutPlanResponseDto createWorkoutPlan(WorkoutPlanRequestDto requestDTO, UUID userId) {
 
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
 
-        // Check if user already has workout plans
+        // Convert DTO to Entity
+        WorkoutPlan workoutPlan = mapper.toEntity(requestDTO);
+
+        // Your Business Logic: First plan should be active, others inactive
         boolean hasExistingPlans = workoutPlanRepo.existsByUserId(userId);
 
         if (!hasExistingPlans) {
-            // First plan should be active
             workoutPlan.setActive(true);
+            workoutPlan.setStartedAt(LocalDateTime.now());
         } else {
-            // Other plans should always be inactive
             workoutPlan.setActive(false);
         }
 
@@ -46,71 +60,87 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
 
         user.addWorkoutPlan(workoutPlan);
 
-        return workoutPlanRepo.save(workoutPlan);
+        WorkoutPlan savedPlan = workoutPlanRepo.save(workoutPlan);
+
+        return mapper.toResponseDto(savedPlan);
     }
 
-    @Transactional
     @Override
-    public WorkoutPlan switchWorkoutPlan(UUID newWorkoutPlanId, UUID userId) {
+    @Transactional
+    public WorkoutPlanResponseDto switchWorkoutPlan(UUID newWorkoutPlanId, UUID userId) {
 
-        //Check if plan exists
         WorkoutPlan plan = workoutPlanRepo.findById(newWorkoutPlanId)
                 .orElseThrow(() -> new RuntimeException("No workout plan found with id: " + newWorkoutPlanId));
 
-        if(!plan.getUserId().equals(userId)){
+        if (!plan.getUserId().equals(userId)) {
             throw new RuntimeException("This plan does not belong to you");
         }
-        //Deactivate all Active workout plans
+
+        // Deactivate all active plans
         workoutPlanRepo.deactivateAllPlansByUserId(userId);
 
-        //active selected plan
+        // Activate selected plan
         plan.setActive(true);
         plan.setStartedAt(LocalDateTime.now());
 
-        return workoutPlanRepo.save(plan);
+        WorkoutPlan savedPlan = workoutPlanRepo.save(plan);
+        return mapper.toResponseDto(savedPlan);
     }
 
     @Override
-    public WorkoutPlan getWorkoutPlanById(UUID workoutId) {
-        return workoutPlanRepo.findById(workoutId)
+    public WorkoutPlanResponseDto getWorkoutPlanById(UUID workoutId) {
+        WorkoutPlan plan = workoutPlanRepo.findById(workoutId)
                 .orElseThrow(() -> new RuntimeException("Workout plan not found with id: " + workoutId));
+
+        return mapper.toResponseDto(plan);
     }
 
     @Override
-    public List<WorkoutPlan> getAllWorkoutPlansByUserId(UUID userId) {
-        return workoutPlanRepo.findByUserId(userId);
+    public List<WorkoutPlanResponseDto> getAllWorkoutPlansByUserId(UUID userId) {
+        return workoutPlanRepo.findByUserId(userId)
+                .stream()
+                .map(mapper::toResponseDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<WorkoutPlan> getActiveWorkoutPlansByUserId(UUID userId) {
-        return workoutPlanRepo.findByUserIdAndIsActiveTrue(userId);
+    public List<WorkoutPlanResponseDto> getActiveWorkoutPlansByUserId(UUID userId) {
+        return workoutPlanRepo.findByUserIdAndIsActiveTrue(userId)
+                .stream()
+                .map(mapper::toResponseDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public WorkoutPlan updateWorkoutPlan(UUID workoutId, WorkoutPlan workoutPlan) {
+    @Transactional
+    public WorkoutPlanResponseDto updateWorkoutPlan(UUID workoutId, WorkoutPlanRequestDto requestDTO) {
 
-        WorkoutPlan existingPlan = getWorkoutPlanById(workoutId);
+        WorkoutPlan existingPlan = workoutPlanRepo.findById(workoutId)
+                .orElseThrow(() -> new RuntimeException("Workout plan not found with id: " + workoutId));
 
-        existingPlan.setTitle(workoutPlan.getTitle());
-        existingPlan.setDescription(workoutPlan.getDescription());
-        existingPlan.setRepeatEnabled(workoutPlan.isRepeatEnabled());
-        existingPlan.setRepeatForWeeks(workoutPlan.getRepeatForWeeks());
+        // Update fields from DTO
+        existingPlan.setTitle(requestDTO.getTitle());
+        existingPlan.setDescription(requestDTO.getDescription());
+        existingPlan.setRepeatEnabled(requestDTO.getRepeatEnabled());
+        existingPlan.setRepeatForWeeks(requestDTO.getRepeatForWeeks());
 
         // Handle active status change
-        if (workoutPlan.isActive() && !existingPlan.isActive()) {
-            // If user is activating this plan, deactivate others
+        if (requestDTO.getIsActive() && !existingPlan.isActive()) {
             workoutPlanRepo.deactivateAllPlansByUserId(existingPlan.getUserId());
+            existingPlan.setStartedAt(LocalDateTime.now());
         }
 
-        existingPlan.setActive(workoutPlan.isActive());
+        existingPlan.setActive(requestDTO.getIsActive());
 
-        return workoutPlanRepo.save(existingPlan);
+        WorkoutPlan updatedPlan = workoutPlanRepo.save(existingPlan);
+        return mapper.toResponseDto(updatedPlan);
     }
 
     @Override
     public void deleteWorkoutPlan(UUID workoutId) {
+        WorkoutPlan plan = workoutPlanRepo.findById(workoutId)
+                .orElseThrow(() -> new RuntimeException("Workout plan not found with id: " + workoutId));
 
-        WorkoutPlan workoutPlan = getWorkoutPlanById(workoutId);
-        workoutPlanRepo.delete(workoutPlan);
+        workoutPlanRepo.delete(plan);
     }
 }
