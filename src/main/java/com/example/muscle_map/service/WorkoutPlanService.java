@@ -1,5 +1,7 @@
 package com.example.muscle_map.service;
 
+import com.example.muscle_map.Dto.WorkoutPlanRequestDto;
+import com.example.muscle_map.Dto.WorkoutPlanResponseDto;
 import com.example.muscle_map.entity.User;
 import com.example.muscle_map.entity.WorkoutPlan;
 
@@ -8,17 +10,17 @@ import java.util.UUID;
 
 public interface WorkoutPlanService {
 
-    WorkoutPlan createWorkoutPlan(WorkoutPlan workoutPlan, UUID userId);
+    WorkoutPlanResponseDto createWorkoutPlan(WorkoutPlanRequestDto requestDTO, UUID userId);
 
-    WorkoutPlan switchWorkoutPlan(UUID newWorkoutPlanId, UUID userId);
+    WorkoutPlanResponseDto switchWorkoutPlan(UUID newWorkoutPlanId, UUID userId);
 
-    WorkoutPlan getWorkoutPlanById(UUID workoutId);
+    WorkoutPlanResponseDto getWorkoutPlanById(UUID workoutId);
 
-    List<WorkoutPlan> getAllWorkoutPlansByUserId(UUID userId);
+    List<WorkoutPlanResponseDto> getAllWorkoutPlansByUserId(UUID userId);
 
-    List<WorkoutPlan> getActiveWorkoutPlansByUserId(UUID userId);
+    List<WorkoutPlanResponseDto> getActiveWorkoutPlansByUserId(UUID userId);
 
-    WorkoutPlan updateWorkoutPlan(UUID workoutId, WorkoutPlan workoutPlan);
+    WorkoutPlanResponseDto updateWorkoutPlan(UUID workoutId, WorkoutPlanRequestDto workoutPlan);
 
     void deleteWorkoutPlan(UUID workoutId);
 
