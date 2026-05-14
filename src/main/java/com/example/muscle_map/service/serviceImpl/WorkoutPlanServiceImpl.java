@@ -4,6 +4,8 @@ import com.example.muscle_map.Dto.WorkoutPlanRequestDto;
 import com.example.muscle_map.Dto.WorkoutPlanResponseDto;
 import com.example.muscle_map.entity.User;
 import com.example.muscle_map.entity.WorkoutPlan;
+import com.example.muscle_map.exceptions.BadRequestException;
+import com.example.muscle_map.exceptions.ResourceNotFoundException;
 import com.example.muscle_map.mapper.WorkoutPlanMapper;
 import com.example.muscle_map.repository.UserRepo;
 import com.example.muscle_map.repository.WorkoutPlanRepo;
@@ -40,7 +42,12 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
     public WorkoutPlanResponseDto createWorkoutPlan(WorkoutPlanRequestDto requestDTO, UUID userId) {
 
         User user = userRepo.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
+
+        //Check duplicate title
+        if(workoutPlanRepo.existsByUserIdAndTitleIgnoreCase(userId, requestDTO.getTitle())){
+            throw new BadRequestException("Workout plan already exists by title - " + requestDTO.getTitle());
+        }
 
         // Convert DTO to Entity
         WorkoutPlan workoutPlan = mapper.toEntity(requestDTO);
@@ -70,10 +77,10 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
     public WorkoutPlanResponseDto switchWorkoutPlan(UUID newWorkoutPlanId, UUID userId) {
 
         WorkoutPlan plan = workoutPlanRepo.findById(newWorkoutPlanId)
-                .orElseThrow(() -> new RuntimeException("No workout plan found with id: " + newWorkoutPlanId));
+                .orElseThrow(() -> new ResourceNotFoundException("No workout plan found with id: " + newWorkoutPlanId));
 
         if (!plan.getUserId().equals(userId)) {
-            throw new RuntimeException("This plan does not belong to you");
+            throw new RuntimeException(" - This plan does not belong to you");
         }
 
         // Deactivate all active plans
@@ -90,25 +97,39 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
     @Override
     public WorkoutPlanResponseDto getWorkoutPlanById(UUID workoutId) {
         WorkoutPlan plan = workoutPlanRepo.findById(workoutId)
-                .orElseThrow(() -> new RuntimeException("Workout plan not found with id: " + workoutId));
+                .orElseThrow(() -> new ResourceNotFoundException("Workout plan not found with id: " + workoutId));
 
         return mapper.toResponseDto(plan);
     }
 
     @Override
     public List<WorkoutPlanResponseDto> getAllWorkoutPlansByUserId(UUID userId) {
-        return workoutPlanRepo.findByUserId(userId)
+
+        //Check if user exists
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
+
+        List<WorkoutPlan> allPlans = workoutPlanRepo.findByUserId(userId);
+        return allPlans
                 .stream()
                 .map(mapper::toResponseDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<WorkoutPlanResponseDto> getActiveWorkoutPlansByUserId(UUID userId) {
-        return workoutPlanRepo.findByUserIdAndIsActiveTrue(userId)
-                .stream()
-                .map(mapper::toResponseDto)
-                .collect(Collectors.toList());
+    public WorkoutPlanResponseDto getActiveWorkoutPlanByUserId(UUID userId) {
+
+        // Check if user exists
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
+
+        // Check if active workout plan exists
+        WorkoutPlan activePlan = workoutPlanRepo.findActivePlanByUserId(userId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "No active workout plan found for user: " + user.getName()
+                ));
+
+        return mapper.toResponseDto(activePlan);
     }
 
     @Override
@@ -116,7 +137,7 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
     public WorkoutPlanResponseDto updateWorkoutPlan(UUID workoutId, WorkoutPlanRequestDto requestDTO) {
 
         WorkoutPlan existingPlan = workoutPlanRepo.findById(workoutId)
-                .orElseThrow(() -> new RuntimeException("Workout plan not found with id: " + workoutId));
+                .orElseThrow(() -> new ResourceNotFoundException("Workout plan not found with id: " + workoutId));
 
         // Update fields from DTO
         existingPlan.setTitle(requestDTO.getTitle());
@@ -139,7 +160,7 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
     @Override
     public void deleteWorkoutPlan(UUID workoutId) {
         WorkoutPlan plan = workoutPlanRepo.findById(workoutId)
-                .orElseThrow(() -> new RuntimeException("Workout plan not found with id: " + workoutId));
+                .orElseThrow(() -> new ResourceNotFoundException("Workout plan not found with id: " + workoutId));
 
         workoutPlanRepo.delete(plan);
     }

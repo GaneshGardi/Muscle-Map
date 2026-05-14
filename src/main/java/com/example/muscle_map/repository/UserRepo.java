@@ -14,5 +14,6 @@ import com.example.muscle_map.entity.User;
 public interface UserRepo extends JpaRepository<User, UUID>{
 
     Optional<User> findByEmail(String email);
+    boolean existsByEmail(String email);
 
 }
