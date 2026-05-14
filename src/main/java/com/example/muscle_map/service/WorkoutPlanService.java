@@ -18,7 +18,7 @@ public interface WorkoutPlanService {
 
     List<WorkoutPlanResponseDto> getAllWorkoutPlansByUserId(UUID userId);
 
-    List<WorkoutPlanResponseDto> getActiveWorkoutPlansByUserId(UUID userId);
+    WorkoutPlanResponseDto getActiveWorkoutPlanByUserId(UUID userId);
 
     WorkoutPlanResponseDto updateWorkoutPlan(UUID workoutId, WorkoutPlanRequestDto workoutPlan);
 

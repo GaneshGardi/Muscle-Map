@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Transactional
@@ -18,10 +19,14 @@ public interface WorkoutPlanRepo extends JpaRepository<WorkoutPlan, UUID> {
 
     List<WorkoutPlan> findByUserId(UUID userId);
 
-    List<WorkoutPlan> findByUserIdAndIsActiveTrue(UUID userId);
+    @Query("SELECT w FROM WorkoutPlan w WHERE w.userId = :userId AND w.isActive = true")
+    Optional<WorkoutPlan> findActivePlanByUserId(@Param("userId") UUID userId);
+
+    List<WorkoutPlan> findByUserIdAndIsActiveFalse(UUID userId);
 
     boolean existsByUserId(UUID userId);
 
+    boolean existsByUserIdAndTitleIgnoreCase(UUID userId, String title);
 
     @Modifying
     @Query("UPDATE WorkoutPlan wp SET wp.isActive = false WHERE wp.userId = :userId")

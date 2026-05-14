@@ -50,8 +50,8 @@ public class WorkoutPlanController {
     }
 
     @GetMapping("/user/{userId}/active")
-    public ResponseEntity<List<WorkoutPlanResponseDto>> getActiveWorkoutPlans(@PathVariable UUID userId) {
-        return ResponseEntity.ok(planService.getActiveWorkoutPlansByUserId(userId));
+    public ResponseEntity<WorkoutPlanResponseDto> getActiveWorkoutPlans(@PathVariable UUID userId) {
+        return ResponseEntity.ok(planService.getActiveWorkoutPlanByUserId(userId));
     }
 
     @PutMapping("/update/{id}")

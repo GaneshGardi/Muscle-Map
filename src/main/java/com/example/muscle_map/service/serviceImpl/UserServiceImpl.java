@@ -5,6 +5,8 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import com.example.muscle_map.exceptions.BadRequestException;
+import com.example.muscle_map.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto addUser(UserRequestDto userDto) {
 
+        if(userRepo.existsByEmail(userDto.getEmail())){
+            throw new BadRequestException("Email already exists. Please use a different email.");
+        }
+
         // Convert request DTO into entity (because DB stores entity)
         User userEntity = UserMapper.toEntity(userDto);
 
@@ -43,7 +49,7 @@ public class UserServiceImpl implements UserService {
         // email = email.trim();
 
         User user = userRepo.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
 
         return UserMapper.toResponseDto(user);
     }
@@ -64,7 +70,7 @@ public class UserServiceImpl implements UserService {
         UUID uuid = UUID.fromString(id);
 
         User user = userRepo.findById(uuid)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
 
         return UserMapper.toResponseDto(user);
     }
@@ -75,7 +81,7 @@ public class UserServiceImpl implements UserService {
         UUID uuid = UUID.fromString(id);
 
         User existinguser = userRepo.findById(uuid)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
 
         // Update entity fields with new values from request DTO
         existinguser.setName(userDto.getName());
@@ -94,7 +100,7 @@ public class UserServiceImpl implements UserService {
         UUID uuid = UUID.fromString(id);
 
         User existingUser = userRepo.findById(uuid)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
 
         userRepo.delete(existingUser);
     }
