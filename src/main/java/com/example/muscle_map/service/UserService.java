@@ -9,7 +9,8 @@ import com.example.muscle_map.Dto.UserResponseDto;
 
 public interface UserService {
 
-    UserResponseDto addUser(UserRequestDto userDto);
+    //NOT NEEDED AFTER ADDING AUTH
+//    UserResponseDto addUser(UserRequestDto userDto);
 
     UserResponseDto getUserByEmail(String email);
 
