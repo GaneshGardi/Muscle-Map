@@ -22,13 +22,14 @@ public class UserController {
     }
 
    //Create new user
-    @PostMapping("/add")
-    public ResponseEntity<UserResponseDto> addUser(@RequestBody UserRequestDto userDto) {
-
-        UserResponseDto createdUser = userService.addUser(userDto);
-
-        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
-    }
+    //NOT NEEDED AFTER ADDING AUTH, USER WILL BE ADDED FROM AUTH ONLY
+//    @PostMapping("/add")
+//    public ResponseEntity<UserResponseDto> addUser(@RequestBody UserRequestDto userDto) {
+//
+//        UserResponseDto createdUser = userService.addUser(userDto);
+//
+//        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+//    }
 
     //Get user by ID    
     @GetMapping("/getUserById/{id}")

@@ -26,22 +26,23 @@ public class UserServiceImpl implements UserService {
         this.userRepo = userRepo;
     }
 
-    @Override
-    public UserResponseDto addUser(UserRequestDto userDto) {
-
-        if(userRepo.existsByEmail(userDto.getEmail())){
-            throw new BadRequestException("Email already exists. Please use a different email.");
-        }
-
-        // Convert request DTO into entity (because DB stores entity)
-        User userEntity = UserMapper.toEntity(userDto);
-
-        // Save user into database
-        User savedUser = userRepo.save(userEntity);
-
-        // Convert saved entity into response DTO (safe response without password)
-        return UserMapper.toResponseDto(savedUser);
-    }
+    //NOT NEEDED AFTER AUTH
+//    @Override
+//    public UserResponseDto addUser(UserRequestDto userDto) {
+//
+//        if(userRepo.existsByEmail(userDto.getEmail())){
+//            throw new BadRequestException("Email already exists. Please use a different email.");
+//        }
+//
+//        // Convert request DTO into entity (because DB stores entity)
+//        User userEntity = UserMapper.toEntity(userDto);
+//
+//        // Save user into database
+//        User savedUser = userRepo.save(userEntity);
+//
+//        // Convert saved entity into response DTO (safe response without password)
+//        return UserMapper.toResponseDto(savedUser);
+//    }
 
     @Override
     public UserResponseDto getUserByEmail(String email) {
