@@ -38,6 +38,8 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<WorkoutPlan> workoutPlans = new ArrayList<>();
 
+    @OneToMany(mappedBy = "createdByUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<ExerciseTemplate> createdExercises = new ArrayList<>();
 
 
 
@@ -95,5 +97,23 @@ public class User {
     public void addWorkoutPlan(WorkoutPlan workoutPlan){
         this.workoutPlans.add(workoutPlan);
         workoutPlan.setUser(this);
+    }
+
+    public void addExerciseTemplate(ExerciseTemplate exerciseTemplate) {
+        this.createdExercises.add(exerciseTemplate);
+        exerciseTemplate.setCreatedByUser(this);
+    }
+
+    public List<ExerciseTemplate> getCreatedExercises() {
+        return createdExercises;
+    }
+
+    public void setCreatedExercises(List<ExerciseTemplate> createdExercises) {
+        this.createdExercises = createdExercises;
+    }
+
+    public void removeExerciseTemplate(ExerciseTemplate exerciseTemplate) {
+        this.createdExercises.remove(exerciseTemplate);
+        exerciseTemplate.setCreatedByUser(null);
     }
 }
