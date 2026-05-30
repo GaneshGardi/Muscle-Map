@@ -79,7 +79,7 @@ public class ExerciseTemplateServiceImpl implements ExerciseTemplateService {
 
     @Override
     public List<ExerciseTemplateResponseDto> getExercisesByMuscleGroup(String muscleGroup) {
-        return exerciseRepo.findByMuscleGroup(muscleGroup)
+        return exerciseRepo.findByMuscleGroupIgnoreCase(muscleGroup)
                 .stream()
                 .map(mapper::toResponseDto)
                 .collect(Collectors.toList());
