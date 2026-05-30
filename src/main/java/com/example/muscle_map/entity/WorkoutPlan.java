@@ -6,6 +6,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -52,10 +54,32 @@ public class WorkoutPlan {
     @JsonIgnoreProperties("workoutPlans")
     private User user;
 
+    @OneToMany(mappedBy = "workoutPlan", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<WorkoutWeek> workoutWeeks = new ArrayList<>();
+
+//    helper methods
+    public void addWorkoutWeek(WorkoutWeek workoutWeek) {
+        this.workoutWeeks.add(workoutWeek);
+        workoutWeek.setWorkoutPlan(this);
+    }
+
+    public void removeWorkoutWeek(WorkoutWeek workoutWeek) {
+        this.workoutWeeks.remove(workoutWeek);
+        workoutWeek.setWorkoutPlan(null);
+    }
+
     // Constructors
     public WorkoutPlan() {}
 
     // ==================== Getters & Setters ====================
+
+    public List<WorkoutWeek> getWorkoutWeeks() {
+        return workoutWeeks;
+    }
+
+    public void setWorkoutWeeks(List<WorkoutWeek> workoutWeeks) {
+        this.workoutWeeks = workoutWeeks;
+    }
 
     public UUID getId() { return id; }
     public void setId(UUID id) { this.id = id; }

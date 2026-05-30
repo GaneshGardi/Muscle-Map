@@ -12,7 +12,7 @@ public interface ExerciseTemplateRepo extends JpaRepository<ExerciseTemplate, UU
 
     List<ExerciseTemplate> findByCreatedByUserId(UUID userId);
 
-    List<ExerciseTemplate> findByMuscleGroup(String muscleGroup);
+    List<ExerciseTemplate> findByMuscleGroupIgnoreCase(String muscleGroup);
 
     boolean existsByNameIgnoreCase(String name);
 }
