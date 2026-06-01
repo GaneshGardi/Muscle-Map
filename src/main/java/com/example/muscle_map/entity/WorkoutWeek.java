@@ -5,6 +5,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -36,10 +38,20 @@ public class WorkoutWeek {
     private WorkoutPlan workoutPlan;
 
     // ==================== Relationship with WorkoutDayTemplate (TEMPORARILY COMMENTED) ====================
-    /*
+
     @OneToMany(mappedBy = "workoutWeek", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<WorkoutDayTemplate> workoutDayTemplates = new ArrayList<>();
-    */
+
+    //helper methods
+
+    public List<WorkoutDayTemplate> getWorkoutDayTemplates() {
+        return workoutDayTemplates;
+    }
+
+    public void addWorkoutDayTemplate(WorkoutDayTemplate day) {
+        workoutDayTemplates.add(day);
+        day.setWorkoutWeek(this);
+    }
 
     // Constructors
     public WorkoutWeek() {}
