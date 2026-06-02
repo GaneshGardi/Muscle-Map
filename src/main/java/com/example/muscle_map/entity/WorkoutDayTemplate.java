@@ -49,8 +49,8 @@ public class WorkoutDayTemplate {
     @JoinColumn(name = "week_id", insertable = false, updatable = false)
     private WorkoutWeek workoutWeek;
 
-//    @OneToMany(mappedBy = "workoutDayTemplate", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    private List<DayExerciseTemplate> dayExercises = new ArrayList<>();
+    @OneToMany(mappedBy = "workoutDayTemplate", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<DayExerciseTemplate> dayExercises = new ArrayList<>();
 
     public WorkoutDayTemplate() {}
 
@@ -93,5 +93,16 @@ public class WorkoutDayTemplate {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    //helper methods
+    public void addDayExercise(DayExerciseTemplate dayExercise) {
+        this.dayExercises.add(dayExercise);
+        dayExercise.setWorkoutDayTemplate(this);
+    }
+
+    public void removeDayExercise(DayExerciseTemplate dayExercise) {
+        this.dayExercises.remove(dayExercise);
+        dayExercise.setWorkoutDayTemplate(null);
     }
 }

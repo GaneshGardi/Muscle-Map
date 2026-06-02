@@ -20,7 +20,7 @@ public class WorkoutPlan {
     private UUID id;
 
     @Column(name = "user_id", nullable = false)
-    private UUID userId;                 // ← This is very important
+    private UUID userId;
 
     @Column(nullable = false)
     private String title;
@@ -35,7 +35,7 @@ public class WorkoutPlan {
     private Integer repeatForWeeks;
 
     @Column(name = "is_active", nullable = false)
-    private boolean isActive;
+    private boolean isActive = false;
 
     @Column(name = "started_at")
     private LocalDateTime startedAt;
@@ -48,7 +48,8 @@ public class WorkoutPlan {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    // Relationship
+    // ==================== Relationships ====================
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     @JsonIgnoreProperties("workoutPlans")
@@ -57,29 +58,11 @@ public class WorkoutPlan {
     @OneToMany(mappedBy = "workoutPlan", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<WorkoutWeek> workoutWeeks = new ArrayList<>();
 
-//    helper methods
-    public void addWorkoutWeek(WorkoutWeek workoutWeek) {
-        this.workoutWeeks.add(workoutWeek);
-        workoutWeek.setWorkoutPlan(this);
-    }
+    // ==================== Constructors ====================
 
-    public void removeWorkoutWeek(WorkoutWeek workoutWeek) {
-        this.workoutWeeks.remove(workoutWeek);
-        workoutWeek.setWorkoutPlan(null);
-    }
-
-    // Constructors
     public WorkoutPlan() {}
 
     // ==================== Getters & Setters ====================
-
-    public List<WorkoutWeek> getWorkoutWeeks() {
-        return workoutWeeks;
-    }
-
-    public void setWorkoutWeeks(List<WorkoutWeek> workoutWeeks) {
-        this.workoutWeeks = workoutWeeks;
-    }
 
     public UUID getId() { return id; }
     public void setId(UUID id) { this.id = id; }
@@ -113,4 +96,19 @@ public class WorkoutPlan {
 
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
+
+    public List<WorkoutWeek> getWorkoutWeeks() { return workoutWeeks; }
+    public void setWorkoutWeeks(List<WorkoutWeek> workoutWeeks) { this.workoutWeeks = workoutWeeks; }
+
+    // ==================== Helper Methods ====================
+
+    public void addWorkoutWeek(WorkoutWeek workoutWeek) {
+        this.workoutWeeks.add(workoutWeek);
+        workoutWeek.setWorkoutPlan(this);
+    }
+
+    public void removeWorkoutWeek(WorkoutWeek workoutWeek) {
+        this.workoutWeeks.remove(workoutWeek);
+        workoutWeek.setWorkoutPlan(null);
+    }
 }
