@@ -1,5 +1,6 @@
 package com.example.muscle_map.service;
 
+import com.example.muscle_map.Dto.WorkoutPlanDetailsResponseDto;
 import com.example.muscle_map.Dto.WorkoutPlanRequestDto;
 import com.example.muscle_map.Dto.WorkoutPlanResponseDto;
 import com.example.muscle_map.entity.User;
@@ -23,5 +24,7 @@ public interface WorkoutPlanService {
     WorkoutPlanResponseDto updateWorkoutPlan(UUID workoutId, WorkoutPlanRequestDto workoutPlan);
 
     void deleteWorkoutPlan(UUID workoutId);
+
+    WorkoutPlanDetailsResponseDto getWorkoutPlanDetails(UUID planId,String email);
 
 }

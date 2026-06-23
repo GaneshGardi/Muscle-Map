@@ -1,14 +1,15 @@
 package com.example.muscle_map.service.serviceImpl;
 
-import com.example.muscle_map.Dto.WorkoutPlanRequestDto;
-import com.example.muscle_map.Dto.WorkoutPlanResponseDto;
+import com.example.muscle_map.Dto.*;
 import com.example.muscle_map.entity.User;
 import com.example.muscle_map.entity.WorkoutPlan;
 import com.example.muscle_map.exceptions.BadRequestException;
 import com.example.muscle_map.exceptions.ResourceNotFoundException;
+import com.example.muscle_map.mapper.DayExerciseTemplateMapper;
+import com.example.muscle_map.mapper.WorkoutDayTemplateMapper;
 import com.example.muscle_map.mapper.WorkoutPlanMapper;
-import com.example.muscle_map.repository.UserRepo;
-import com.example.muscle_map.repository.WorkoutPlanRepo;
+import com.example.muscle_map.mapper.WorkoutWeekMapper;
+import com.example.muscle_map.repository.*;
 import com.example.muscle_map.service.WorkoutPlanService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -25,13 +26,27 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
     private final UserRepo userRepo;
     private final WorkoutPlanRepo workoutPlanRepo;
     private final WorkoutPlanMapper mapper;
+    private final DayExerciseTemplateRepo dayExerciseTemplateRepo;
+    private final WorkoutWeekRepo workoutWeekRepo;
+    private final WorkoutWeekMapper workoutWeekMapper;
+    private final WorkoutDayTemplateRepo workoutDayTemplateRepo;
+    private final DayExerciseTemplateMapper dayExerciseTemplateMapper;
+    private final WorkoutDayTemplateMapper workoutDayTemplateMapper;
+
 
     public WorkoutPlanServiceImpl(UserRepo userRepo,
                                   WorkoutPlanRepo workoutPlanRepo,
-                                  WorkoutPlanMapper mapper) {
+                                  WorkoutPlanMapper mapper, DayExerciseTemplateRepo dayExerciseTemplateRepo, WorkoutWeekRepo workoutWeekRepo, WorkoutWeekMapper workoutWeekMapper, WorkoutDayTemplateRepo workoutDayTemplateRepo, DayExerciseTemplateMapper dayExerciseTemplateMapper, WorkoutDayTemplateMapper workoutDayTemplateMapper) {
         this.userRepo = userRepo;
         this.workoutPlanRepo = workoutPlanRepo;
         this.mapper = mapper;
+        this.dayExerciseTemplateRepo = dayExerciseTemplateRepo;
+        this.workoutWeekRepo = workoutWeekRepo;
+        this.workoutWeekMapper = workoutWeekMapper;
+        this.workoutDayTemplateRepo = workoutDayTemplateRepo;
+        this.dayExerciseTemplateMapper = dayExerciseTemplateMapper;
+        this.workoutDayTemplateMapper = workoutDayTemplateMapper;
+
     }
 
     @Override
@@ -150,5 +165,76 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
         WorkoutPlan plan = workoutPlanRepo.findById(workoutId)
                 .orElseThrow(() -> new ResourceNotFoundException("Workout plan not found"));
         workoutPlanRepo.delete(plan);
+    }
+
+
+    @Override
+    public WorkoutPlanDetailsResponseDto getWorkoutPlanDetails(
+            UUID planId,
+            String email) {
+
+        User user = userRepo.findByEmail(email)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "User not found with email: " + email));
+
+        WorkoutPlan plan = workoutPlanRepo.findById(planId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Workout plan not found with id: " + planId));
+
+        // Ownership check
+        if (!plan.getUserId().equals(user.getId())) {
+            throw new BadRequestException(
+                    "You do not have access to this workout plan");
+        }
+
+        WorkoutPlanDetailsResponseDto response =
+                new WorkoutPlanDetailsResponseDto();
+
+        response.setId(plan.getId());
+        response.setTitle(plan.getTitle());
+        response.setDescription(plan.getDescription());
+
+        List<WorkoutWeekResponseDto> weekDtos =
+                workoutWeekRepo.findByPlanIdOrderByWeekNumber(planId)
+                        .stream()
+                        .map(week -> {
+
+                            WorkoutWeekResponseDto weekDto =
+                                    workoutWeekMapper.toResponseDto(week);
+
+                            List<WorkoutDayTemplateResponseDto> dayDtos =
+                                    workoutDayTemplateRepo
+                                            .findByWeekIdOrderBySortOrderAsc(week.getId())
+                                            .stream()
+                                            .map(day -> {
+
+                                                WorkoutDayTemplateResponseDto dayDto =
+                                                        workoutDayTemplateMapper
+                                                                .toResponseDto(day);
+
+                                                List<DayExerciseTemplateResponseDto> exerciseDtos =
+                                                        dayExerciseTemplateRepo
+                                                                .findByDayTemplateIdOrderBySortOrderAsc(day.getId())
+                                                                .stream()
+                                                                .map(dayExerciseTemplateMapper::toResponseDto)
+                                                                .toList();
+
+                                                dayDto.setExercises(exerciseDtos);
+
+                                                return dayDto;
+                                            })
+                                            .toList();
+
+                            weekDto.setDays(dayDtos);
+
+                            return weekDto;
+                        })
+                        .toList();
+
+        response.setWeeks(weekDtos);
+
+        return response;
     }
 }

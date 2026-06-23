@@ -18,17 +18,22 @@ public class WorkoutDayTemplateMapper {
         return entity;
     }
 
-    public WorkoutDayTemplateResponseDto toResponseDto(WorkoutDayTemplate entity) {
-        return new WorkoutDayTemplateResponseDto(
-                entity.getId(),
-                entity.getWeekId(),
-                entity.getDayOfWeek(),
-                entity.getTitle(),
-                entity.getDayType(),
-                entity.getRestNoteTemplate(),
-                entity.getSortOrder(),
-                entity.getCreatedAt(),
-                entity.getUpdatedAt()
-        );
+    public WorkoutDayTemplateResponseDto toResponseDto(
+            WorkoutDayTemplate entity) {
+
+        WorkoutDayTemplateResponseDto dto =
+                new WorkoutDayTemplateResponseDto();
+
+        dto.setId(entity.getId());
+        dto.setWeekId(entity.getWeekId());
+        dto.setDayOfWeek(entity.getDayOfWeek());
+        dto.setTitle(entity.getTitle());
+        dto.setDayType(entity.getDayType());
+        dto.setRestNoteTemplate(entity.getRestNoteTemplate());
+        dto.setSortOrder(entity.getSortOrder());
+        dto.setCreatedAt(entity.getCreatedAt());
+        dto.setUpdatedAt(entity.getUpdatedAt());
+
+        return dto;
     }
 }
