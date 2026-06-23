@@ -13,4 +13,6 @@ public interface WorkoutWeekRepo extends JpaRepository<WorkoutWeek, UUID> {
     List<WorkoutWeek> findByPlanId(UUID planId);
 
     boolean existsByPlanIdAndWeekNumber(UUID planId, Integer weekNumber);
+
+    List<WorkoutWeek> findByPlanIdOrderByWeekNumber(UUID planId);
 }

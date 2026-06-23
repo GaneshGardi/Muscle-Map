@@ -1,7 +1,9 @@
 package com.example.muscle_map.controller;
 
+import com.example.muscle_map.Dto.WorkoutPlanDetailsResponseDto;
 import com.example.muscle_map.Dto.WorkoutPlanRequestDto;
 import com.example.muscle_map.Dto.WorkoutPlanResponseDto;
+import com.example.muscle_map.security.SecurityUtils;
 import com.example.muscle_map.service.WorkoutPlanService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -66,5 +68,16 @@ public class WorkoutPlanController {
     public ResponseEntity<Void> deleteWorkoutPlan(@PathVariable UUID id) {
         planService.deleteWorkoutPlan(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{planId}/full")
+    public ResponseEntity<WorkoutPlanDetailsResponseDto> getWorkoutPlanDetails(
+            @PathVariable UUID planId) {
+
+        String email = SecurityUtils.getCurrentUserEmail();
+
+        return ResponseEntity.ok(
+                planService.getWorkoutPlanDetails(planId, email)
+        );
     }
 }

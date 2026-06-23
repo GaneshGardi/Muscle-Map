@@ -13,4 +13,5 @@ public interface WorkoutDayTemplateRepo extends JpaRepository<WorkoutDayTemplate
     List<WorkoutDayTemplate> findByWeekId(UUID weekId);
 
     List<WorkoutDayTemplate> findByWeekIdOrderBySortOrderAsc(UUID weekId);
+
 }
