@@ -1,9 +1,11 @@
-import { Text, TextProps } from "react-native";
-import Typography  from "../theme/Typography";
-import  Colors  from "../theme/Colors";
+import React from "react";
+import { Text, TextProps, TextStyle } from "react-native";
 
+import Typography from "@/theme/Typography";
+import Colors from "@/theme/Colors";
 
 type Variant =
+  | "logo"
   | "display"
   | "h1"
   | "h2"
@@ -13,7 +15,8 @@ type Variant =
   | "bodyMedium"
   | "bodySmall"
   | "caption"
-  | "button";
+  | "button"
+  | "label";
 
 interface Props extends TextProps {
   variant?: Variant;
@@ -32,10 +35,8 @@ export default function AppText({
     <Text
       {...rest}
       style={[
-        Typography[variant="body"],
-        {
-          color,
-        },
+        Typography[variant] as TextStyle,
+        { color },
         style,
       ]}
     >
