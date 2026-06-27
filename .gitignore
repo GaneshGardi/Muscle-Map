@@ -31,3 +31,22 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+# React Native / Expo
+muscle-map_frontend/node_modules/
+muscle-map_frontend/.expo/
+muscle-map_frontend/.expo-shared/
+muscle-map_frontend/android/app/build/
+muscle-map_frontend/android/.gradle/
+muscle-map_frontend/ios/build/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment
+.env
+.env.*
