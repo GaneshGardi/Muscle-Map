@@ -13,7 +13,7 @@ interface AppLogoProps {
 }
 
 export default function AppLogo({
-  size = 112,
+  size = 100,
   showTitle,
   showTagline = false,
 }: AppLogoProps) {
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    marginTop: 8,
+    marginTop: 6,
     textAlign: "center",
   },
 
