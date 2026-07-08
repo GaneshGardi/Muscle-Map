@@ -57,7 +57,8 @@ const styles = StyleSheet.create({
   },
 
   subtitle: {
-    lineHeight: 30,
+    marginTop: 8,
+    // lineHeight: 30,
     width: "100%",
   },
 });

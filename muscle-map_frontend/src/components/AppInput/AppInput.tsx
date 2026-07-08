@@ -137,8 +137,8 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     borderWidth: 1,
     borderColor: Colors.border,
-    paddingHorizontal: Spacing.lg,
-    height:56,
+    paddingHorizontal: 18,
+    height:54,
   },
 
   input: {
