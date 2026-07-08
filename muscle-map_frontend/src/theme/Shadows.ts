@@ -37,7 +37,8 @@ export const Shadows = {
     ios:{
       shadowColor:"#000",
       shadowOpacity:0.15,
-      shadowRadius:12,
+      shadowRadius:8,
+      elevaltion: 4,
       shadowOffset:{width:0,height:6},
     },
 

@@ -2,9 +2,9 @@ export const Radius = {
 
   xs:6,
 
-  sm:10,
+  sm:8,
 
-  md:14,
+  md:12,
 
   lg:18,
 

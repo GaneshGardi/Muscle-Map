@@ -8,9 +8,9 @@ import {
 import AppText from "../AppText/AppText";
 
 import Colors from "@/theme/Colors";
-import { Radius } from "@/theme/Radius";
 import { Shadows } from "@/theme/Shadows";
 import { Spacing } from "@/theme/Spacing";
+import { Radius } from "@/theme/Radius";
 
 type Variant = "primary" | "secondary" | "outline";
 
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
   button: {
     height: 56,
 
-    borderRadius: Radius.lg,
+    borderRadius: 16,
 
     justifyContent: "center",
 
@@ -105,6 +105,6 @@ const styles = StyleSheet.create({
 
     ...Shadows.small,
 
-    paddingHorizontal: Spacing.xl,
+    paddingHorizontal: 24,
   },
 });
