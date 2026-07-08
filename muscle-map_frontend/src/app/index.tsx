@@ -1,50 +1,62 @@
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
-import Screen from "@/components/Screen/Screen";
-import AppInput from "@/components/AppInput/AppInput";
-import AppButton from "@/components/AppButton/AppButton";
+import AppButton from "../components/AppButton/AppButton";
+import AppInput from "../components/AppInput/AppInput";
+import Divider from "../components/Divider/Divider";
+import AuthLayout from "../components/Layouts/AuthLayout/AuthLayout";
+import AuthFooter from "@/components/AuthFooter/AuthFooter";
+
 
 export default function Home() {
-
   return (
+    <AuthLayout
+      showLogo
+      title={"Continue your\nFitness Journey"}
+      subtitle="Sign in to keep progressing towards your goals."
+    >
+      <View style={styles.form}>
+        <AppInput label="Email" placeholder="Enter your email" />
 
-    <Screen>
-
-      <View
-        style={{
-          marginTop: 70,
-          gap: 20,
-        }}
-      >
-
-        <AppInput
-          label="Email"
-          placeholder="Enter your email"
-          leftIcon="mail-outline"
-        />
+        <View style={styles.fieldGap} />
 
         <AppInput
           label="Password"
           placeholder="Enter your password"
           secureTextEntry
-          leftIcon="lock-closed-outline"
         />
 
-        <AppInput
-          label="Email"
-          placeholder="Wrong email"
-          leftIcon="mail-outline"
-          error="Please enter a valid email"
-        />
+        <View style={styles.buttonGap} />
 
-        <AppButton
-          title="Continue"
-        />
+        <AppButton title="Continue" onPress={() => {}} />
 
+        <View style={styles.dividerGap} />
+
+        <Divider />
+
+        <AuthFooter
+        question="Don't have an Account?"
+        action="Register"
+        onPress={() => {}}
+        />
       </View>
-
-    </Screen>
-
+    </AuthLayout>
   );
-
 }
+
+const styles = StyleSheet.create({
+  form: {
+    width: "100%",
+  },
+
+  fieldGap: {
+    height: 16,
+  },
+
+  buttonGap: {
+    height: 24,
+  },
+
+  dividerGap: {
+    height: 32,
+  },
+});

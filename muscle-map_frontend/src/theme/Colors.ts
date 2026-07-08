@@ -24,10 +24,17 @@ const Colors = {
   inputBackground: "#FFFFFF",
 
   // States
-  success: "#4CAF50",
-  warning: "#F4A261",
-  error: "#E63946",
-  info: "#3A86FF",
+  success: "#2E7D32",
+  successBackground: "#E8F5E9",
+  successBorder: "#C8E6C9", 
+
+  warning: "#ED6C02",
+  warningBackground: "#FFF4E5",
+  warningBorder: "#FFE0B2",
+
+  error: "#D32F2F",
+  errorBackground: "#FDECEC",
+  errorBorder: "#F8CACA",
 
   // Workout
   workout: "#E76F51",
@@ -36,6 +43,8 @@ const Colors = {
   // Misc
   overlay: "rgba(0,0,0,0.4)",
   shadow: "#000000",
+
+ 
 };
 
 export default Colors;

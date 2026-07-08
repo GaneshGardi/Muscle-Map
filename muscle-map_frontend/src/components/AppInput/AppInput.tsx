@@ -11,9 +11,10 @@ import { Ionicons } from "@expo/vector-icons";
 
 import AppText from "../AppText/AppText";
 
-import Colors from "@/theme/Colors";
-import { Radius } from "@/theme/Radius";
-import { Spacing } from "@/theme/Spacing";
+import Colors from "../../theme/Colors";
+import { Radius } from "../../theme/Radius";
+import { Spacing } from "../../theme/Spacing";
+
 
 interface Props extends TextInputProps {
   label?: string;
@@ -32,17 +33,13 @@ export default function AppInput({
   style,
   ...rest
 }: Props) {
-
   const [hidden, setHidden] = useState(secureTextEntry);
+  const [isFocused, setIsFocused] = useState(false);
 
   return (
     <View style={styles.container}>
-
       {label && (
-        <AppText
-          variant="label"
-          style={styles.label}
-        >
+        <AppText variant="label" style={styles.label}>
           {label}
         </AppText>
       )}
@@ -50,15 +47,21 @@ export default function AppInput({
       <View
         style={[
           styles.inputContainer,
+          isFocused && styles.focusedBorder,
           error && styles.errorBorder,
         ]}
       >
-
         {leftIcon && (
           <Ionicons
             name={leftIcon}
-            size={20}
-            color={Colors.textSecondary}
+            size={20
+
+            }
+            color={
+              isFocused
+                ? Colors.primary
+                : Colors.textSecondary
+            }
             style={styles.icon}
           />
         )}
@@ -66,14 +69,16 @@ export default function AppInput({
         <TextInput
           {...rest}
           secureTextEntry={hidden}
-          placeholderTextColor={Colors.placeholder}
           style={[styles.input, style]}
+          placeholderTextColor={Colors.placeholder}
+          cursorColor={Colors.primary}
+          selectionColor={Colors.primary}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
         />
 
         {secureTextEntry && (
-          <Pressable
-            onPress={() => setHidden(!hidden)}
-          >
+          <Pressable onPress={() => setHidden(!hidden)}>
             <Ionicons
               name={
                 hidden
@@ -81,7 +86,11 @@ export default function AppInput({
                   : "eye-outline"
               }
               size={20}
-              color={Colors.textSecondary}
+              color={
+                isFocused
+                  ? Colors.primary
+                  : Colors.textSecondary
+              }
             />
           </Pressable>
         )}
@@ -90,10 +99,13 @@ export default function AppInput({
           <Ionicons
             name={rightIcon}
             size={20}
-            color={Colors.textSecondary}
+            color={
+              isFocused
+                ? Colors.primary
+                : Colors.textSecondary
+            }
           />
         )}
-
       </View>
 
       {error && (
@@ -105,13 +117,11 @@ export default function AppInput({
           {error}
         </AppText>
       )}
-
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-
   container: {
     width: "100%",
   },
@@ -121,49 +131,34 @@ const styles = StyleSheet.create({
   },
 
   inputContainer: {
-
     flexDirection: "row",
-
     alignItems: "center",
-
     backgroundColor: Colors.surface,
-
-    borderRadius: Radius.lg,
-
+    borderRadius: 18,
     borderWidth: 1,
-
     borderColor: Colors.border,
-
     paddingHorizontal: Spacing.lg,
-
-    height: 58,
-
+    height:56,
   },
 
   input: {
-
     flex: 1,
-
     marginHorizontal: Spacing.md,
-
   },
 
   icon: {
-
-    marginRight: 2,
-
+    marginRight: Spacing.xs,
   },
 
   error: {
-
-    marginTop: 6,
-
+    marginTop: Spacing.xs,
   },
 
   errorBorder: {
-
     borderColor: Colors.error,
-
   },
 
+  focusedBorder: {
+    borderColor: Colors.primary,
+  },
 });
