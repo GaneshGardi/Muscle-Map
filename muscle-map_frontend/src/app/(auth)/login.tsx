@@ -10,6 +10,7 @@ import AuthLayout from "../../components/Layouts/AuthLayout/AuthLayout";
 import Divider from "@/components/Divider/Divider";
 import KeyboardScreen from "@/components/Keyboard/KeyboardScreen";
 import Colors from "../../theme/Colors";
+import Spacer from "@/components/Spacer/Spacer";
 
 export default function Login() {
   return (
@@ -43,7 +44,7 @@ export default function Login() {
           leftIcon="mail-outline"
         />
 
-        <View style={styles.inputSpacing} />
+        <Spacer/>
 
         <AppInput
           label="Password"
@@ -63,7 +64,7 @@ export default function Login() {
           </AppText>
         </Pressable>
 
-        <View style={styles.buttonSpacing} />
+        <Spacer size={24} />
 
         <AppButton title="Continue" onPress={() => {}} />
 
@@ -71,19 +72,11 @@ export default function Login() {
       </AuthLayout>
     </KeyboardScreen>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  inputSpacing: {
-    height: 16,
-  },
-
   forgotPassword: {
     alignSelf: "flex-end",
     marginTop: 12,
-  },
-
-  buttonSpacing: {
-    height: 24,
   },
 });
