@@ -57,7 +57,9 @@ public class AuthServiceImpl implements AuthService {
 
         System.out.println("✅ User created successfully with ID: " + savedUser.getId());
 
-        return new AuthResponseDto("User registered successfully!", null);
+        String token = jwtUtil.generateToken(savedUser.getEmail());
+
+        return new AuthResponseDto("User registered successfully!", token);
     }
 
     @Override
