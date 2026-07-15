@@ -1,5 +1,5 @@
 import { router } from "expo-router";
-import { Pressable, StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet } from "react-native";
 
 import AppButton from "../../components/AppButton/AppButton";
 import AppInput from "../../components/AppInput/AppInput";
@@ -9,10 +9,56 @@ import AuthLayout from "../../components/Layouts/AuthLayout/AuthLayout";
 
 import Divider from "@/components/Divider/Divider";
 import KeyboardScreen from "@/components/Keyboard/KeyboardScreen";
-import Colors from "../../theme/Colors";
 import Spacer from "@/components/Spacer/Spacer";
+import Colors from "../../theme/Colors";
+
+import authService from "@/services/authService";
+import { saveToken } from "@/storage/tokenStorage";
+import { useState } from "react";
+
+import AppFormMessage from "@/components/AppFormMessage/AppFormMessage";
 
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleLogin = async () => {
+    setError("");
+
+    if (!email.trim()) {
+      setError("Please enter email.");
+      return;
+    }
+    if (!password.trim()) {
+      setError("Please enter password.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const response = await authService.login({
+        email,
+        password,
+      });
+
+      await saveToken(response.token);
+
+      //temporary
+      router.replace("/(onboarding)/welcome");
+    } catch (err: any) {
+    
+        setError(
+          err?.response?.data?.message ?? "Something went wrong. Please try again."
+        );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <KeyboardScreen>
       <AuthLayout
@@ -27,13 +73,7 @@ export default function Login() {
           />
         }
       >
-        {/* Uncomment when connecting backend */}
-        {/*
-      <AppFormMessage
-        type="error"
-        message="Invalid email or password."
-      />
-      */}
+        {error ? <AppFormMessage type="error" message={error} /> : null}
 
         <AppInput
           label="Email"
@@ -42,9 +82,11 @@ export default function Login() {
           autoCapitalize="none"
           autoCorrect={false}
           leftIcon="mail-outline"
+          value={email}
+          onChangeText={setEmail}
         />
 
-        <Spacer/>
+        <Spacer />
 
         <AppInput
           label="Password"
@@ -53,6 +95,8 @@ export default function Login() {
           autoCapitalize="none"
           autoCorrect={false}
           leftIcon="lock-closed-outline"
+          value={password}
+          onChangeText={setPassword}
         />
 
         <Pressable
@@ -66,13 +110,13 @@ export default function Login() {
 
         <Spacer size={24} />
 
-        <AppButton title="Continue" onPress={() => {}} />
+        <AppButton title="Continue" loading={loading} onPress={handleLogin} />
 
         <Divider />
       </AuthLayout>
     </KeyboardScreen>
   );
-};
+}
 
 const styles = StyleSheet.create({
   forgotPassword: {
