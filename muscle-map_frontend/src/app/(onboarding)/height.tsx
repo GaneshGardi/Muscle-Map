@@ -1,9 +1,11 @@
 import Screen from "@/components/Screen/Screen";
 import AppText from "@/components/AppText/AppText";
+import ProgressBar from "@/components/Onboarding/ProgressBar";
 
 export default function Height() {
   return (
     <Screen>
+
       <AppText variant="h1">Height</AppText>
     </Screen>
   );

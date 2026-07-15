@@ -83,7 +83,7 @@ export default function Signup() {
     <KeyboardScreen>
       <AuthLayout
         showLogo
-        title={"Create your\nAccount"}
+        title={"Create your Free\nAccount"}
         subtitle="Join Muscle Map and start building your fitness journey."
         footer={
           <AuthFooter

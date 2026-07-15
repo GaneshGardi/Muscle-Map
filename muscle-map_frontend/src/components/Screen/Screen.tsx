@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
   scrollContainer: {
     flexGrow: 1,
     paddingHorizontal: Spacing.xl,
-    paddingBottom: Spacing.giant,
+    paddingBottom: Spacing.xl,
     backgroundColor: Colors.background,
   },
 });
