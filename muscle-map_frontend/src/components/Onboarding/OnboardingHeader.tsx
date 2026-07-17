@@ -1,8 +1,8 @@
 import React from "react";
 import {
+  View,
   Pressable,
   StyleSheet,
-  View,
 } from "react-native";
 
 import { router } from "expo-router";
@@ -12,7 +12,6 @@ import AppText from "../AppText/AppText";
 import ProgressBar from "./ProgressBar";
 
 import Colors from "@/theme/Colors";
-import { Spacing } from "@/theme/Spacing";
 
 interface Props {
   title: string;
@@ -38,17 +37,17 @@ export default function OnboardingHeader({
         <View style={styles.topRow}>
 
           <Pressable
-            style={styles.backButton}
             onPress={() => router.back()}
+            style={styles.backButton}
           >
             <Ionicons
               name="chevron-back"
-              size={24}
+              size={26}
               color={Colors.text}
             />
           </Pressable>
 
-          <View style={styles.progress}>
+          <View style={styles.progressContainer}>
             <ProgressBar
               currentStep={currentStep}
               totalSteps={totalSteps}
@@ -60,7 +59,10 @@ export default function OnboardingHeader({
 
       <View style={styles.textContainer}>
 
-        <AppText variant="display">
+        <AppText
+          variant="display"
+          style={styles.title}
+        >
           {title}
         </AppText>
 
@@ -81,37 +83,61 @@ export default function OnboardingHeader({
 }
 
 const styles = StyleSheet.create({
+
   container: {
-    width: "100%",
-    paddingTop: Spacing.sm,
+
+    paddingTop: 8,
+
+    marginBottom: 12,
   },
 
   topRow: {
+
     flexDirection: "row",
+
     alignItems: "center",
 
-    marginBottom: 20,
+    marginBottom: 36,
   },
 
   backButton: {
-    width: 34,
-    height: 34,
+
+    width: 42,
+
+    height: 42,
 
     justifyContent: "center",
+
     alignItems: "center",
+
+    marginRight: 14,
   },
 
-  progress: {
-    flex: 1,
+  progressContainer: {
 
-    marginLeft: 10,
+    flex: 1,
   },
 
   textContainer: {
-    marginTop: 6,
+
+  },
+
+  title: {
+
+    fontSize: 34,
+
+    lineHeight: 40,
+
+    fontWeight: "700",
   },
 
   subtitle: {
-    marginTop: Spacing.sm,
+
+    marginTop: 12,
+
+    fontSize: 16,
+
+    lineHeight: 24,
   },
+
 });

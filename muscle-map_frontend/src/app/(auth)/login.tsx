@@ -54,6 +54,9 @@ export default function Login() {
         setError(
           err?.response?.data?.message ?? "Something went wrong. Please try again."
         );
+        console.log(err);
+        console.log(err.response)
+        console.log(err.message);
     } finally {
       setLoading(false);
     }
