@@ -1,12 +1,20 @@
-import Screen from "@/components/Screen/Screen";
-import AppText from "@/components/AppText/AppText";
-import ProgressBar from "@/components/Onboarding/ProgressBar";
+import { router } from "expo-router";
 
-export default function Height() {
+import HeightPicker from "@/components/Onboarding/HeightPicker/HeightPicker";
+import OnboardingLayout from "@/components/Layouts/OnboardingLayout/OnboardingLayout";
+import { STEPS, TOTAL_ONBOARDING_STEPS } from "@/components/Onboarding/OnboardingSteps";
+
+export default function HeightScreen() {
   return (
-    <Screen>
-
-      <AppText variant="h1">Height</AppText>
-    </Screen>
+    <OnboardingLayout 
+      currentStep={STEPS.HEIGHT}
+      totalSteps={TOTAL_ONBOARDING_STEPS}
+      title="How tall are you?"
+      subtitle="We'll use your height to personalize your calorie and workout recommendations."
+      buttonTitle="Continue"
+      onButtonPress={() => router.push("/(onboarding)/weight")}
+    >
+      <HeightPicker />
+    </OnboardingLayout>
   );
 }

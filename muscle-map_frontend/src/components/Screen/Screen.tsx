@@ -59,8 +59,9 @@ const styles = StyleSheet.create({
 
   scrollContainer: {
     flexGrow: 1,
-    paddingHorizontal: Spacing.xl,
-    paddingBottom: Spacing.xl,
+    paddingHorizontal: 24,
+    paddingBottom: 20,
+    paddingTop:18,
     backgroundColor: Colors.background,
   },
 });

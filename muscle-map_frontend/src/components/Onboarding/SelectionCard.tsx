@@ -1,190 +1,94 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import {
-  Animated,
-  Pressable,
   StyleSheet,
   View,
 } from "react-native";
 
-import * as Haptics from "expo-haptics";
 import { Ionicons } from "@expo/vector-icons";
 
+import AppCard from "../AppCard/AppCard";
 import AppText from "../AppText/AppText";
 
 import Colors from "@/theme/Colors";
-import { Radius } from "@/theme/Radius";
-import { Shadows } from "@/theme/Shadows";
 import { Spacing } from "@/theme/Spacing";
 
 interface Props {
   title: string;
+
   subtitle?: string;
 
-  icon?: keyof typeof Ionicons.glyphMap;
+  icon: keyof typeof Ionicons.glyphMap;
 
-  selected?: boolean;
+  selected: boolean;
 
-  onPress?: () => void;
+  onPress: () => void;
 }
 
 export default function SelectionCard({
   title,
   subtitle,
   icon,
-  selected = false,
+  selected,
   onPress,
 }: Props) {
-  const scale = useRef(new Animated.Value(1)).current;
-
-  useEffect(() => {
-    Animated.spring(scale, {
-      toValue: selected ? 1.02 : 1,
-      friction: 7,
-      tension: 120,
-      useNativeDriver: true,
-    }).start();
-  }, [selected]);
-
-  async function handlePress() {
-    await Haptics.selectionAsync();
-    onPress?.();
-  }
-
   return (
-    <Animated.View
-      style={[
-        styles.wrapper,
-        {
-          transform: [{ scale }],
-        },
-      ]}
+    <AppCard
+      selected={selected}
+      onPress={onPress}
     >
-      <Pressable
-        onPress={handlePress}
-        style={({ pressed }) => [
-          styles.card,
+      <View style={styles.row}>
 
-          selected && styles.selectedCard,
+        <View
+          style={[
+            styles.iconContainer,
 
-          pressed && styles.pressed,
-        ]}
-      >
-        {/* LEFT SIDE */}
-
-        <View style={styles.leftSection}>
-          {icon && (
-            <View
-              style={[
-                styles.iconContainer,
-                selected && styles.selectedIconContainer,
-              ]}
-            >
-              <Ionicons
-                name={icon}
-                size={28}
-                color={
-                  selected
-                    ? Colors.primary
-                    : Colors.primary
-                }
-              />
-            </View>
-          )}
-
-          <View style={styles.textContainer}>
-            <AppText
-              variant="bodyMedium"
-              color={
-                selected
-                  ? Colors.textInverse
-                  : Colors.text
-              }
-            >
-              {title}
-            </AppText>
-
-            {subtitle && (
-              <AppText
-                variant="caption"
-                color={
-                  selected
-                    ? "rgba(255,255,255,0.85)"
-                    : Colors.textSecondary
-                }
-                style={styles.subtitle}
-              >
-                {subtitle}
-              </AppText>
-            )}
-          </View>
+            selected && styles.iconSelected,
+          ]}
+        >
+          <Ionicons
+            name={icon}
+            size={28}
+            color={
+              selected
+                ? Colors.textInverse
+                : Colors.primary
+            }
+          />
         </View>
 
-        {/* RIGHT CHECK */}
+        <View style={styles.textContainer}>
+          <AppText variant="h2">
+            {title}
+          </AppText>
 
-        <Ionicons
-          name={
-            selected
-              ? "checkmark-circle"
-              : "ellipse-outline"
-          }
-          size={24}
-          color={
-            selected
-              ? Colors.textInverse
-              : Colors.textMuted
-          }
-        />
-      </Pressable>
-    </Animated.View>
+          {subtitle ? (
+            <AppText
+              variant="body"
+              color={Colors.textSecondary}
+              style={styles.subtitle}
+            >
+              {subtitle}
+            </AppText>
+          ) : null}
+        </View>
+
+      </View>
+    </AppCard>
   );
 }
 
 const styles = StyleSheet.create({
-  wrapper: {
-    marginBottom: Spacing.md,
-  },
-
-  card: {
+  row: {
     flexDirection: "row",
 
     alignItems: "center",
-
-    justifyContent: "space-between",
-
-    paddingVertical: 18,
-
-    paddingHorizontal: 18,
-
-    backgroundColor: Colors.surface,
-
-    borderRadius: Radius.lg,
-
-    ...Shadows.small,
-  },
-
-  selectedCard: {
-    backgroundColor: Colors.primary,
-
-    ...Shadows.medium,
-  },
-
-  pressed: {
-    opacity: 0.95,
-  },
-
-  leftSection: {
-    flexDirection: "row",
-
-    alignItems: "center",
-
-    flex: 1,
   },
 
   iconContainer: {
-    width: 54,
-    height: 54,
+    width: 60,
+    height: 60,
 
-    borderRadius: 27,
+    borderRadius: 18,
 
     justifyContent: "center",
 
@@ -193,14 +97,14 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.surfaceAlt,
   },
 
-  selectedIconContainer: {
-    backgroundColor: Colors.surface,
+  iconSelected: {
+    backgroundColor: Colors.primary,
   },
 
   textContainer: {
-    marginLeft: Spacing.md,
-
     flex: 1,
+
+    marginLeft: Spacing.lg,
   },
 
   subtitle: {

@@ -8,6 +8,7 @@ import AppText from "@/components/AppText/AppText";
 
 import Colors from "@/theme/Colors";
 import { Spacing } from "@/theme/Spacing";
+import { STEPS, TOTAL_ONBOARDING_STEPS } from "@/components/Onboarding/OnboardingSteps";
 
 const genderOptions = [
   {
@@ -49,12 +50,12 @@ export default function GenderScreen() {
     <OnboardingLayout
       title="Tell us about yourself"
       subtitle="This helps us personalize your fitness journey."
-      currentStep={2}
-      totalSteps={7}
+      currentStep={STEPS.GENDER}
+      totalSteps={TOTAL_ONBOARDING_STEPS}
       // buttonTitle="Continue"
       // onButtonPress={}
       // buttonDisabled={!gender}
-      centerContent={false}
+      // centerContent={false}
     >
       <View style={styles.container}>
         <AppText variant="h2">

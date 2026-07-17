@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 
 import SelectionCard from "./SelectionCard";
+import { Spacing } from "@/theme/Spacing";
 
 interface Option {
   label: string;
@@ -56,6 +57,7 @@ export default function SelectionGroup({
 const styles = StyleSheet.create({
   container: {
     width: "100%",
+    gap: Spacing.md,
   },
 
   gridContainer: {
