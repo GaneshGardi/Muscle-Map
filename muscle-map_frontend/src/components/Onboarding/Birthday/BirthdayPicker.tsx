@@ -12,7 +12,7 @@ export default function BirthdayPicker() {
 
   const [day, setDay] = useState(15);
 
-  const [month, setMonth] = useState("January");
+  const [month, setMonth] = useState("July");
 
   const [year, setYear] = useState(2026);
 

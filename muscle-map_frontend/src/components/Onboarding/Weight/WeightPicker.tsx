@@ -6,7 +6,7 @@ import WeightRuler from "./WeightRuler";
 
 export default function WeightPicker() {
   const [unit, setUnit] = useState<"kg" | "lb">("kg");
-  const [weight, setWeight] = useState(72);
+  const [weight, setWeight] = useState(67);
 
 
   const handleUnitChange = (newUnit: "kg" | "lb") => {
