@@ -60,18 +60,22 @@ export default function WeightRuler({
   }, []);
 
   useEffect(() => {
-    const index = Math.round(
-      (value - MIN_WEIGHT) / STEP
-    );
 
-    requestAnimationFrame(() => {
-      listRef.current?.scrollToOffset({
-        offset:
-          index * TICK_SPACING,
-        animated: false,
-      });
+  const index = Math.round(
+    (value - MIN_WEIGHT) / STEP
+  );
+
+
+  requestAnimationFrame(() => {
+
+    listRef.current?.scrollToOffset({
+      offset: index * TICK_SPACING,
+      animated: false,
     });
-  }, [unit]);
+
+  });
+
+}, []);
 
   const scrollHandler = useAnimatedScrollHandler({
   onMomentumEnd: (event) => {
@@ -138,7 +142,7 @@ export default function WeightRuler({
           showsHorizontalScrollIndicator={false}
           bounces={false}
           overScrollMode="never"
-        //   snapToInterval={TICK_SPACING}
+          // snapToInterval={TICK_SPACING}
           snapToAlignment="center"
           decelerationRate="fast"
           onScroll={scrollHandler}
