@@ -6,7 +6,7 @@ import {
 
 import DayWheel from "./DayWheel";
 import MonthWheel from "./MonthWheel";
-import YearWheel from "./YeaerWheel";
+import YearWheel from "./YearWheel";
 
 export default function BirthdayPicker() {
 
