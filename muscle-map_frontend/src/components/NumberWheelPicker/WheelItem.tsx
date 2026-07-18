@@ -19,12 +19,14 @@ export const ITEM_HEIGHT = 72;
 
 interface Props {
   value: number | null;
+  displayValue?: string,
   index: number;
   scrollY: SharedValue<number>;
 }
 
 export default function WheelItem({
   value,
+  displayValue,
   index,
   scrollY,
 }: Props) {
@@ -72,7 +74,7 @@ export default function WheelItem({
         variant="display"
         style={styles.number}
       >
-        {value}
+        {displayValue ?? value}
       </AppText>
     </Animated.View>
   );

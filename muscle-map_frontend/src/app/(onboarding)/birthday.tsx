@@ -1,10 +1,19 @@
-import Screen from "@/components/Screen/Screen";
-import AppText from "@/components/AppText/AppText";
+import { router } from "expo-router";
 
-export default function Birthday() {
+import BirthdayPicker from "@/components/Onboarding/Birthday/BirthdayPicker";
+import OnboardingLayout from "@/components/Layouts/OnboardingLayout/OnboardingLayout";
+
+export default function BirthdayScreen() {
   return (
-    <Screen>
-      <AppText variant="h1">Birthday</AppText>
-    </Screen>
+    <OnboardingLayout
+      currentStep={5}
+      totalSteps={9}
+      title="What's your birthday?"
+      subtitle="We'll use your age to personalize your recommendations."
+      buttonTitle="Continue"
+      onButtonPress={() => router.push("/(onboarding)/goals")}
+    >
+      <BirthdayPicker />
+    </OnboardingLayout>
   );
 }
