@@ -41,11 +41,13 @@ export default function TermsScreen() {
 
   function openTerms() {
     console.log("Open Terms");
+    router.push("/legal/terms")
   }
 
 
   function openPrivacy() {
     console.log("Open Privacy");
+    router.push("/legal/privacy")
   }
 
 
