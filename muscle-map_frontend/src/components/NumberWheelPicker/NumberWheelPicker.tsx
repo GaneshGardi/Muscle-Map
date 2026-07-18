@@ -1,13 +1,6 @@
-import React, {
-  useEffect,
-  useMemo,
-  useRef,
-} from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 
-import {
-  StyleSheet,
-  View,
-} from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import Animated, {
   runOnJS,
@@ -15,9 +8,7 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated";
 
-import WheelItem, {
-  ITEM_HEIGHT,
-} from "./WheelItem";
+import WheelItem, { ITEM_HEIGHT } from "./WheelItem";
 import CenterHighlight from "./CenterHighlight";
 import FadeOverlay from "./FadeOverlay";
 
@@ -41,33 +32,22 @@ export default function NumberWheelPicker({
   max,
   value,
   onValueChange,
+  formatter,
   showHighlight = true,
 }: Props) {
   const values = useMemo(() => {
-    const data = Array.from(
-      { length: max - min + 1 },
-      (_, i) => min + i
-    );
+    const data = Array.from({ length: max - min + 1 }, (_, i) => min + i);
 
     return [null, null, ...data, null, null];
   }, [min, max]);
 
-  const listRef =
-    useRef<Animated.FlatList<any>>(null);
+  const listRef = useRef<Animated.FlatList<any>>(null);
 
-  const initialIndex = useMemo(
-    () => value - min + 2,
-    [value, min]
-  );
+  const initialIndex = useMemo(() => value - min + 2, [value, min]);
 
-  const scrollY = useSharedValue(
-    initialIndex * ITEM_HEIGHT
-  );
+  const scrollY = useSharedValue(initialIndex * ITEM_HEIGHT);
 
-  const scrollToIndex = (
-    index: number,
-    animated = true
-  ) => {
+  const scrollToIndex = (index: number, animated = true) => {
     listRef.current?.scrollToOffset({
       offset: index * ITEM_HEIGHT,
       animated,
@@ -80,92 +60,59 @@ export default function NumberWheelPicker({
     });
   }, [initialIndex]);
 
-  const scrollHandler =
-    useAnimatedScrollHandler({
-      onScroll: (event) => {
-        scrollY.value =
-          event.contentOffset.y;
-      },
+  const scrollHandler = useAnimatedScrollHandler({
+    onScroll: (event) => {
+      scrollY.value = event.contentOffset.y;
+    },
 
-      onMomentumEnd: (event) => {
-        const index = Math.round(
-          event.contentOffset.y /
-            ITEM_HEIGHT
-        );
+    onMomentumEnd: (event) => {
+      const index = Math.round(event.contentOffset.y / ITEM_HEIGHT);
 
-        const minIndex = 2;
-        const maxIndex =
-          values.length - 3;
+      const minIndex = 2;
+      const maxIndex = values.length - 3;
 
-        const clampedIndex = Math.max(
-          minIndex,
-          Math.min(index, maxIndex)
-        );
+      const clampedIndex = Math.max(minIndex, Math.min(index, maxIndex));
 
-        if (
-          clampedIndex !== index
-        ) {
-          runOnJS(scrollToIndex)(
-            clampedIndex
-          );
-        }
+      if (clampedIndex !== index) {
+        runOnJS(scrollToIndex)(clampedIndex);
+      }
 
-        const selected =
-          values[clampedIndex];
+      const selected = values[clampedIndex];
 
-        if (
-          selected !== null &&
-          selected !== undefined
-        ) {
-          runOnJS(onValueChange)(
-            selected
-          );
-        }
-      },
-    });
+      if (selected !== null && selected !== undefined) {
+        runOnJS(onValueChange)(selected);
+      }
+    },
+  });
 
   return (
     <View style={styles.container}>
-      {showHighlight && (
-        <CenterHighlight />
-      )}
+      {showHighlight && <CenterHighlight />}
 
       <Animated.FlatList
         ref={listRef}
         data={values}
-        keyExtractor={(_, index) =>
-          index.toString()
-        }
-        renderItem={({
-          item,
-          index,
-        }) => (
+        keyExtractor={(_, index) => index.toString()}
+        renderItem={({ item, index }) => (
           <WheelItem
             value={item}
+            displayValue={
+              item == null ? undefined : formatter ? formatter(item) : undefined
+            }
             index={index}
             scrollY={scrollY}
           />
         )}
-        showsVerticalScrollIndicator={
-          false
-        }
+        showsVerticalScrollIndicator={false}
         bounces={false}
-        alwaysBounceVertical={
-          false
-        }
+        alwaysBounceVertical={false}
         overScrollMode="never"
-        snapToInterval={
-          ITEM_HEIGHT
-        }
+        snapToInterval={ITEM_HEIGHT}
         decelerationRate="fast"
         onScroll={scrollHandler}
         scrollEventThrottle={16}
         contentContainerStyle={{
-          paddingVertical:
-            (ITEM_HEIGHT *
-              (VISIBLE_ITEMS -
-                1)) /
-            2,
+          paddingVertical: (ITEM_HEIGHT * (VISIBLE_ITEMS - 1)) / 2,
         }}
       />
 
@@ -174,16 +121,12 @@ export default function NumberWheelPicker({
   );
 }
 
-const styles =
-  StyleSheet.create({
-    container: {
-      height:
-        ITEM_HEIGHT *
-        VISIBLE_ITEMS,
+const styles = StyleSheet.create({
+  container: {
+    height: ITEM_HEIGHT * VISIBLE_ITEMS,
 
-      justifyContent:
-        "center",
+    justifyContent: "center",
 
-      overflow: "hidden",
-    },
-  });
+    overflow: "hidden",
+  },
+});
