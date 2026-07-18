@@ -43,7 +43,7 @@ export default function GoalScreen() {
     // Save to onboarding context/API later
 
     setTimeout(() => {
-      router.push("/(onboarding)/terms");
+      router.push("/(onboarding)/T&C");
     }, 250);
   }
 
