@@ -24,15 +24,15 @@ public class UserOnboardingResponseDto {
 
     private Gender gender;
 
-    private LocalDate birthDate;
+    private Double height;
 
     private Double weight;
 
-    private Double height;
+    private LocalDate birthDate;
 
     private FitnessGoal goal;
 
-    private TrainingExperience trainingExperience;
+//    private TrainingExperience trainingExperience;
 
     private Boolean acceptedTerms;
 
