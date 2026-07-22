@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -30,6 +31,7 @@ public class UserOnboarding {
     @Column(name = "user_id", nullable = false, unique = true)
     private UUID userId;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Gender gender;
 
@@ -42,11 +44,10 @@ public class UserOnboarding {
     @Column(nullable = false)
     private Double height;
 
-    @Column(nullable = false)
-    private FitnessGoal goal;
+    @Column(name = "fitness_goal",nullable = false)
+    @Enumerated(EnumType.STRING)
+    private FitnessGoal fitnessGoal;
 
-    @Column(name = "training_experience", nullable = false)
-    private TrainingExperience trainingExperience;
 
     @Column(name = "accepted_terms", nullable = false)
     private Boolean acceptedTerms;

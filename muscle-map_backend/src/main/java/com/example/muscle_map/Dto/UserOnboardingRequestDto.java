@@ -22,7 +22,7 @@ public class UserOnboardingRequestDto {
 
     private LocalDate birthDate;
 
-    private FitnessGoal goal;
+    private FitnessGoal fitnessGoal;
 
 //    private TrainingExperience trainingExperience;
 

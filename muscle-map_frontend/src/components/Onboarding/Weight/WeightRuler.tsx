@@ -146,7 +146,7 @@ export default function WeightRuler({
           snapToAlignment="center"
           decelerationRate="fast"
           onScroll={scrollHandler}
-          scrollEventThrottle={70}
+          scrollEventThrottle={100}
           contentContainerStyle={{
             paddingHorizontal: sidePadding,
           }}

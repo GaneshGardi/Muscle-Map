@@ -1,12 +1,33 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import React from "react";
+import { View } from "react-native";
+import { router } from "expo-router";
 
-const home = () => {
+import AppButton from "@/components/AppButton/AppButton";
+import { deleteToken } from "@/storage/tokenStorage";
+
+export default function Home() {
+  const handleLogout = async () => {
+    try {
+      await deleteToken();
+
+      router.replace("/(auth)/login");
+    } catch (error) {
+      console.log("Logout failed:", error);
+    }
+  };
+
   return (
-    <View>
-      <Text>home</Text>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <AppButton
+        title="Logout"
+        onPress={handleLogout}
+      />
     </View>
-  )
+  );
 }
-
-export default home

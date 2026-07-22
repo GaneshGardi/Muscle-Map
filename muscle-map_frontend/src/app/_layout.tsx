@@ -1,21 +1,26 @@
 import { Stack } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
+import { OnboardingProvider } from "@/contexts/OnboardingContext";
 
 export default function RootLayout() {
   return (
     <SafeAreaProvider>
-      <StatusBar style="dark" />
+      <OnboardingProvider>
 
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          animation: "slide_from_right",
-          contentStyle: {
-            backgroundColor: "#FAFAF7",
-          },
-        }}
-      />
+        <StatusBar style="dark" />
+
+        <Stack
+          screenOptions={{
+            headerShown: false,
+            animation: "slide_from_right",
+            contentStyle: {
+              backgroundColor: "#FAFAF7",
+            },
+          }}
+        />
+
+      </OnboardingProvider>
     </SafeAreaProvider>
   );
 }
