@@ -15,12 +15,10 @@ public class UserOnboardingMapper {
                 new UserOnboarding();
 
         onboarding.setGender(dto.getGender());
-        onboarding.setBirthDate(dto.getBirthDate());
-        onboarding.setWeight(dto.getWeight());
         onboarding.setHeight(dto.getHeight());
-        onboarding.setGoal(dto.getGoal());
-        onboarding.setTrainingExperience(
-                dto.getTrainingExperience());
+        onboarding.setWeight(dto.getWeight());
+        onboarding.setBirthDate(dto.getBirthDate());
+        onboarding.setFitnessGoal(dto.getFitnessGoal());
         onboarding.setAcceptedTerms(
                 dto.getAcceptedTerms());
 
@@ -36,12 +34,10 @@ public class UserOnboardingMapper {
         dto.setId(onboarding.getId());
         dto.setUserId(onboarding.getUserId());
         dto.setGender(onboarding.getGender());
-        dto.setBirthDate(onboarding.getBirthDate());
-        dto.setWeight(onboarding.getWeight());
         dto.setHeight(onboarding.getHeight());
-        dto.setGoal(onboarding.getGoal());
-        dto.setTrainingExperience(
-                onboarding.getTrainingExperience());
+        dto.setWeight(onboarding.getWeight());
+        dto.setBirthDate(onboarding.getBirthDate());
+        dto.setFitnessGoal(onboarding.getFitnessGoal());
         dto.setAcceptedTerms(
                 onboarding.getAcceptedTerms());
         dto.setCompleted(

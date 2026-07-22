@@ -8,7 +8,12 @@ import AppText from "@/components/AppText/AppText";
 
 import Colors from "@/theme/Colors";
 import { Spacing } from "@/theme/Spacing";
-import { STEPS, TOTAL_ONBOARDING_STEPS } from "@/components/Onboarding/OnboardingSteps";
+import {
+  STEPS,
+  TOTAL_ONBOARDING_STEPS,
+} from "@/components/Onboarding/OnboardingSteps";
+
+import { useOnboarding } from "@/contexts/OnboardingContext";
 
 const genderOptions = [
   {
@@ -31,20 +36,19 @@ const genderOptions = [
 export default function GenderScreen() {
   const [gender, setGender] = useState("");
 
-  function handleSelect(value: string){
+  const { updateOnboarding } = useOnboarding();
+
+  function handleSelect(value: string) {
     setGender(value);
 
+    updateOnboarding({
+      gender: value,
+    });
+
     setTimeout(() => {
-      router.push("/(onboarding)/height")
+      router.push("/(onboarding)/height");
     }, 250);
   }
-
-  // function handleContinue() {
-  //   if (!gender) return;
-
-  //   // Later we'll save it to context/API
-  //   router.push("/(onboarding)/height");
-  // }
 
   return (
     <OnboardingLayout
@@ -52,15 +56,9 @@ export default function GenderScreen() {
       subtitle="This helps us personalize your fitness journey."
       currentStep={STEPS.GENDER}
       totalSteps={TOTAL_ONBOARDING_STEPS}
-      // buttonTitle="Continue"
-      // onButtonPress={}
-      // buttonDisabled={!gender}
-      // centerContent={false}
     >
       <View style={styles.container}>
-        <AppText variant="h2">
-          Which gender best describes you?
-        </AppText>
+        <AppText variant="h2">Which gender best describes you?</AppText>
 
         <View style={styles.cards}>
           <SelectionGroup

@@ -1,16 +1,18 @@
-import React, { useState } from "react";
 import { router } from "expo-router";
+import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 
+import AppText from "@/components/AppText/AppText";
 import OnboardingLayout from "@/components/Layouts/OnboardingLayout/OnboardingLayout";
 import SelectionGroup from "@/components/Onboarding/SelectionGroup";
-import AppText from "@/components/AppText/AppText";
 
-import { Spacing } from "@/theme/Spacing";
 import {
   STEPS,
   TOTAL_ONBOARDING_STEPS,
 } from "@/components/Onboarding/OnboardingSteps";
+import { Spacing } from "@/theme/Spacing";
+
+import { useOnboarding } from "@/contexts/OnboardingContext";
 
 const goalOptions = [
   {
@@ -21,26 +23,29 @@ const goalOptions = [
   },
   {
     label: "Lose Weight",
-    value: "LOSE_WEIGHT",
+    value: "FAT_LOSS",
     icon: "flame",
     subtitle: "Burn fat and get leaner",
   },
   {
     label: "Gain Strength",
-    value: "GAIN_STRENGTH",
+    value: "GET_STRONGER",
     icon: "fitness",
     subtitle: "Increase power and lifts",
   },
 ];
 
 export default function GoalScreen() {
-  const [goal, setGoal] = useState("");
+  const { onboardingData, updateOnboarding } = useOnboarding();
+
+  const [goal, setGoal] = useState(onboardingData.fitnessGoal || "");
 
   function handleSelect(value: string) {
     setGoal(value);
 
-    // TODO:
-    // Save to onboarding context/API later
+    updateOnboarding({
+      fitnessGoal: value,
+    });
 
     setTimeout(() => {
       router.push("/(onboarding)/T&C");
@@ -55,9 +60,7 @@ export default function GoalScreen() {
       totalSteps={TOTAL_ONBOARDING_STEPS}
     >
       <View style={styles.container}>
-        <AppText variant="h2">
-          Choose you goal
-        </AppText>
+        <AppText variant="h2">Choose you goal</AppText>
 
         <View style={styles.cards}>
           <SelectionGroup

@@ -30,7 +30,7 @@ public class UserOnboardingResponseDto {
 
     private LocalDate birthDate;
 
-    private FitnessGoal goal;
+    private FitnessGoal fitnessGoal;
 
 //    private TrainingExperience trainingExperience;
 
