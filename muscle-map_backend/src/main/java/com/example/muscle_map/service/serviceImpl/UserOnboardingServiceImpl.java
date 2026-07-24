@@ -42,6 +42,10 @@ public class UserOnboardingServiceImpl
                 .orElseThrow(() ->
                         new ResourceNotFoundException(
                                 "User not found"));
+        System.out.println("=================================");
+        System.out.println("Authenticated email: " + email);
+        System.out.println("Authenticated userId: " + user.getId());
+        System.out.println("=================================");
 
         if (onboardingRepo.existsByUserId(user.getId())) {
             throw new BadRequestException(

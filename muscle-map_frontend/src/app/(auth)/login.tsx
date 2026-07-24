@@ -17,6 +17,7 @@ import { saveToken } from "@/storage/tokenStorage";
 import { useState } from "react";
 
 import AppFormMessage from "@/components/AppFormMessage/AppFormMessage";
+import onboardingService from "@/services/onboardingService";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -47,16 +48,21 @@ export default function Login() {
 
       await saveToken(response.token);
 
-      //temporary
-      router.replace("/(onboarding)/welcome");
+      const completed = await onboardingService.getStatus();
+
+      if (completed) {
+        router.replace("/(tabs)/home");
+      } else {
+        router.replace("/(onboarding)/welcome");
+      }
     } catch (err: any) {
-    
-        setError(
-          err?.response?.data?.message ?? "Something went wrong. Please try again."
-        );
-        console.log(err);
-        console.log(err.response)
-        console.log(err.message);
+      setError(
+        err?.response?.data?.message ??
+          "Something went wrong. Please try again.",
+      );
+      console.log(err);
+      console.log(err.response);
+      console.log(err.message);
     } finally {
       setLoading(false);
     }

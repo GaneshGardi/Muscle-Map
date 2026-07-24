@@ -18,6 +18,21 @@ const onboardingService = {
 
     return response.data;
   },
+
+  async getStatus() {
+    const token = await getToken();
+
+    const response = await apiClient.get(
+      "/onboarding/status",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  },
 };
 
 export default onboardingService;
