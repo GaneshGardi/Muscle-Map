@@ -1,33 +1,41 @@
 import React from "react";
-import { View } from "react-native";
-import { router } from "expo-router";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import AppButton from "@/components/AppButton/AppButton";
-import { deleteToken } from "@/storage/tokenStorage";
+import HomeHeader from "@/components/Home/Header/HomeHeader";
 
-export default function Home() {
-  const handleLogout = async () => {
-    try {
-      await deleteToken();
+import { Colors } from "@/theme/AppTheme";
 
-      router.replace("/(auth)/login");
-    } catch (error) {
-      console.log("Logout failed:", error);
-    }
-  };
-
+export default function HomeScreen() {
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
+    <SafeAreaView
+      style={styles.container}
+      edges={["top"]}
     >
-      <AppButton
-        title="Logout"
-        onPress={handleLogout}
-      />
-    </View>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.content}
+      >
+        <HomeHeader />
+
+        {/* Next Component */}
+        <View style={styles.placeholder} />
+      </ScrollView>
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.background,
+  },
+
+  content: {
+    paddingBottom: 80,
+  },
+
+  placeholder: {
+    height: 800,
+  },
+});

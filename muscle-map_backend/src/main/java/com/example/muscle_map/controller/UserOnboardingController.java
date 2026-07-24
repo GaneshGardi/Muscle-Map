@@ -6,6 +6,7 @@ import com.example.muscle_map.security.SecurityUtils;
 import com.example.muscle_map.service.UserOnboardingService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
 
 @RestController
 @RequestMapping("/api/onboarding")
@@ -17,6 +18,17 @@ public class UserOnboardingController {
             UserOnboardingService onboardingService) {
 
         this.onboardingService = onboardingService;
+    }
+
+    @GetMapping("/status")
+    public ResponseEntity<Boolean> onboardingStatus(
+            Authentication authentication) {
+
+        return ResponseEntity.ok(
+                onboardingService.isOnboardingCompleted(
+                        authentication.getName()
+                )
+        );
     }
 
     @PostMapping("/complete")
@@ -46,15 +58,4 @@ public class UserOnboardingController {
                         email));
     }
 
-    @GetMapping("/status")
-    public ResponseEntity<Boolean>
-    getStatus() {
-
-        String email =
-                SecurityUtils.getCurrentUserEmail();
-
-        return ResponseEntity.ok(
-                onboardingService
-                        .isOnboardingCompleted(email));
-    }
 }
