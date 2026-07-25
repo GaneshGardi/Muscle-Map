@@ -1,25 +1,34 @@
-import React from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import HomeHeader from "@/components/Home/Header/HomeHeader";
+import WeekHero from "@/components/Home/Hero/WeekHero";
 
-import { Colors } from "@/theme/AppTheme";
+import { Colors, Spacing } from "@/theme/AppTheme";
 
 export default function HomeScreen() {
   return (
     <SafeAreaView
-      style={styles.container}
       edges={["top"]}
+      style={styles.container}
     >
+      <HomeHeader />
+
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.content}
       >
-        <HomeHeader />
+        <WeekHero
+          week={1}
+          workoutName="Push Day"
+          muscleGroups="Chest • Shoulders • Triceps"
+          progress={40}
+          completed={2}
+          total={5}
+        />
 
-        {/* Next Component */}
-        <View style={styles.placeholder} />
+        {/* RoadMap comes here later */}
+
       </ScrollView>
     </SafeAreaView>
   );
@@ -28,14 +37,13 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+
     backgroundColor: Colors.background,
   },
 
   content: {
-    paddingBottom: 80,
-  },
+    paddingBottom: 140,
 
-  placeholder: {
-    height: 800,
+    gap: Spacing.xl,
   },
 });

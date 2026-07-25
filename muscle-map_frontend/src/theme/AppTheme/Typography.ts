@@ -1,6 +1,8 @@
 // src/theme/AppTheme/Typography.ts
 
-const Typography = {
+import { TextStyle } from "react-native";
+
+const Typography: Record<string, TextStyle> = {
   hero: {
     fontSize: 36,
     fontWeight: "700",
