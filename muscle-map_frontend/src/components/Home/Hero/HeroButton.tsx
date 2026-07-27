@@ -1,36 +1,38 @@
 import React from "react";
 import { Pressable, Text, View } from "react-native";
+
 import { ArrowRight } from "lucide-react-native";
 
-import styles from "./WeekHero.styles";
 import { Colors } from "@/theme/AppTheme";
 
+import styles from "./Hero.styles";
+
 interface HeroButtonProps {
-  title: string;
   onPress?: () => void;
 }
 
 export default function HeroButton({
-  title,
   onPress,
 }: HeroButtonProps) {
   return (
     <Pressable
-      onPress={onPress}
       style={({ pressed }) => [
-        styles.heroButton,
-        pressed && { opacity: 0.9 },
+        styles.button,
+        pressed && {
+          transform: [{ scale: 0.97 }],
+        },
       ]}
+      onPress={onPress}
     >
-      <Text style={styles.heroButtonText}>
-        {title}
+      <Text style={styles.buttonText}>
+        Start Workout
       </Text>
 
-      <View style={styles.heroArrowCircle}>
+      <View style={styles.buttonCircle}>
         <ArrowRight
-          size={18}
+          size={22}
           color={Colors.primary}
-          strokeWidth={2.6}
+          strokeWidth={3}
         />
       </View>
     </Pressable>

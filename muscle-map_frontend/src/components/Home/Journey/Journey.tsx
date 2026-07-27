@@ -1,12 +1,12 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-const HomeHeader = () => {
+const Journey = () => {
   return (
     <View>
-      <Text>HomeHeader</Text>
+      <Text>Journey</Text>
     </View>
   )
 }
 
-export default HomeHeader
+export default Journey
