@@ -56,7 +56,6 @@ export default StyleSheet.create({
 
     letterSpacing: 1.4,
 
-    marginBottom: 8,
   },
 
   title: {
@@ -66,7 +65,7 @@ export default StyleSheet.create({
 
     color: Colors.text,
 
-    marginBottom: 6,
+    marginBottom: 2,
   },
 
   subtitle: {
@@ -74,13 +73,13 @@ export default StyleSheet.create({
 
     color: Colors.textSecondary,
 
-    marginBottom: 24,
+    marginBottom: 10,
 
     lineHeight: 24,
   },
 
   button: {
-    height: 58,
+    height: 50,
 
     borderRadius: 18,
 
@@ -94,7 +93,7 @@ export default StyleSheet.create({
 
     paddingLeft: 22,
 
-    paddingRight: 8,
+    paddingRight:  22,
   },
 
   buttonText: {
@@ -106,15 +105,16 @@ export default StyleSheet.create({
   },
 
   buttonCircle: {
-    width: 46,
+    width: 40,
 
-    height: 46,
+    height: 40,
 
     borderRadius: 23,
 
     backgroundColor: Colors.surface,
 
     justifyContent: "center",
+
 
     alignItems: "center",
   },
