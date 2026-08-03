@@ -1,39 +1,49 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { Pressable, Text, View } from "react-native";
+import { ChevronRight } from "lucide-react-native";
 
-import HeroButton from "./HeroButton";
-import ProgressRing from "./ProgessRing";
+import { Colors } from "@/theme/AppTheme";
 
-import styles from "./Hero.styles";
+import styles from "./CurrentWorkoutCard.styles";
 
-export default function CurrentWorkoutCard() {
+interface CurrentWorkoutCardProps {
+  week?: number;
+  day?: number;
+  workoutName?: string;
+  onPress?: () => void;
+}
+
+export default function CurrentWorkoutCard({
+  week = 3,
+  day = 2,
+  workoutName = "Push Day",
+  onPress,
+}: CurrentWorkoutCardProps) {
   return (
-    <View style={styles.card}>
-
-      <View style={styles.leftSection}>
-        <Text style={styles.week}>
-          WEEK 3
+    <Pressable
+      onPress={onPress}
+      style={({ pressed }) => [
+        styles.card,
+        pressed && styles.cardPressed,
+      ]}
+    >
+      <View style={styles.textContent}>
+        <Text style={styles.label}>
+          WEEK {week} • DAY {day}
         </Text>
 
         <Text style={styles.title}>
-          Push Day
+          {workoutName}
         </Text>
-
-        <Text style={styles.subtitle}>
-          Chest • Shoulders • Triceps
-        </Text>
-
-        <HeroButton />
       </View>
 
-      <View style={styles.rightSection}>
-        <ProgressRing
-          progress={40}
-          completed={2}
-          total={5}
+      <View style={styles.arrowContainer}>
+        <ChevronRight
+          size={22}
+          color={Colors.surface}
+          strokeWidth={2.8}
         />
       </View>
-
-    </View>
+    </Pressable>
   );
 }

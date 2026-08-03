@@ -1,9 +1,9 @@
 import React from "react";
-import { ScrollView, StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import HomeHeader from "@/components/Home/Header/HomeHeader";
-import CurrentWorkoutCard from "@/components/Home/Hero/CurrentWorkoutCard";
+import HomeHeader from "@/components/Home/Header/HomeHeader"; 
+import CurrentWorkoutCard from "@/components/Home/Hero/CurrentWorkoutCard"; 
 import Journey from "@/components/Home/Journey/Journey";
 
 import { Colors } from "@/theme/AppTheme";
@@ -14,22 +14,17 @@ export default function HomeScreen() {
       style={styles.container}
       edges={["top"]}
     >
-      {/* Header */}
+      {/* Fixed top section */}
       <HomeHeader />
 
-      {/* Entire Home Scroll */}
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.content}
-        showsVerticalScrollIndicator={false}
-        bounces={false}
-      >
-        {/* Current Workout */}
+      <View style={styles.hero}>
         <CurrentWorkoutCard />
+      </View>
 
-        {/* Journey */}
+      {/* Journey */}
+      <View style={styles.journey}>
         <Journey />
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 }
@@ -37,14 +32,18 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+
     backgroundColor: Colors.background,
   },
 
-  scrollView: {
-    flex: 1,
+  hero: {
+    paddingTop: 4,
+    paddingBottom: 8,
   },
 
-  content: {
-    paddingBottom: 120,
+  journey: {
+    flex: 1,
+
+    marginTop: 4,
   },
 });
