@@ -1,49 +1,36 @@
 import React from "react";
-import { Pressable, Text, View } from "react-native";
-import { ChevronRight } from "lucide-react-native";
+import { Text, View } from "react-native";
+import { Flag } from "lucide-react-native";
 
 import { Colors } from "@/theme/AppTheme";
 
 import styles from "./CurrentWorkoutCard.styles";
 
 interface CurrentWorkoutCardProps {
-  week?: number;
-  day?: number;
-  workoutName?: string;
-  onPress?: () => void;
+  weekNumber: number;
+  title: string;
 }
 
 export default function CurrentWorkoutCard({
-  week = 3,
-  day = 2,
-  workoutName = "Push Day",
-  onPress,
+  weekNumber,
+  title,
 }: CurrentWorkoutCardProps) {
   return (
-    <Pressable
-      onPress={onPress}
-      style={({ pressed }) => [
-        styles.card,
-        pressed && styles.cardPressed,
-      ]}
-    >
-      <View style={styles.textContent}>
-        <Text style={styles.label}>
-          WEEK {week} • DAY {day}
-        </Text>
-
-        <Text style={styles.title}>
-          {workoutName}
-        </Text>
-      </View>
-
-      <View style={styles.arrowContainer}>
-        <ChevronRight
-          size={22}
+    <View style={styles.card}>
+      <View style={styles.eyebrowRow}>
+        <Flag
+          size={13}
           color={Colors.surface}
           strokeWidth={2.8}
+          fill={Colors.surface}
         />
+
+        <Text style={styles.eyebrow}>WEEK {weekNumber}</Text>
       </View>
-    </Pressable>
+
+      <Text style={styles.title} numberOfLines={1}>
+        {title}
+      </Text>
+    </View>
   );
 }

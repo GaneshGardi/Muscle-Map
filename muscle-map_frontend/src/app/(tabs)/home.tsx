@@ -17,9 +17,7 @@ export default function HomeScreen() {
       {/* Fixed top section */}
       <HomeHeader />
 
-      <View style={styles.hero}>
-        <CurrentWorkoutCard />
-      </View>
+
 
       {/* Journey */}
       <View style={styles.journey}>

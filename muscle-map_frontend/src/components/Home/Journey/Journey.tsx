@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import {
   Animated,
   LayoutChangeEvent,
@@ -10,9 +10,13 @@ import {
 
 import { journeyData } from "@/components/Home/Data/journeyData";
 
+import CurrentWorkoutCard from "../Hero/CurrentWorkoutCard";
 import WeekSection from "./Week/WeekSection";
 
 import styles from "./Journey.styles";
+
+const BANNER_HEIGHT = 84;
+const SCROLL_TOP_PADDING = BANNER_HEIGHT + 14;
 
 export default function Journey() {
   const scrollViewRef = useRef<ScrollView>(null);
@@ -23,12 +27,19 @@ export default function Journey() {
 
   const opacity = useRef(new Animated.Value(0)).current;
 
-  // Week 1 at the bottom, later weeks progress upward.
-  const reversedWeeks = [...journeyData].reverse();
+  const reversedWeeks = useMemo(() => [...journeyData].reverse(), []);
 
-  const currentWeekId = journeyData.find((week) =>
-    week.workouts.some((workout) => workout.state === "current")
-  )?.id;
+  const currentWeekId = useMemo(
+    () =>
+      journeyData.find((week) =>
+        week.workouts.some((workout) => workout.state === "current")
+      )?.id,
+    []
+  );
+
+  const [activeWeekId, setActiveWeekId] = useState(currentWeekId);
+
+  const activeWeek = journeyData.find((week) => week.id === activeWeekId);
 
   const handleWorkoutPress = (workoutId: string) => {
     console.log("Workout selected:", workoutId);
@@ -44,11 +55,12 @@ export default function Journey() {
         currentWeekId
       ) {
         const targetY = weekOffsets.current[weekId];
+        const clampedTargetY = Math.max(targetY - SCROLL_TOP_PADDING, 0);
 
-        minScrollY.current = targetY;
+        minScrollY.current = clampedTargetY;
 
         scrollViewRef.current?.scrollTo({
-          y: targetY,
+          y: clampedTargetY,
           animated: false,
         });
 
@@ -66,26 +78,53 @@ export default function Journey() {
 
   const handleScroll = useCallback(
     (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-      if (minScrollY.current === null) return;
-
       const currentY = event.nativeEvent.contentOffset.y;
 
-      // Block scrolling down past the current week (into completed weeks).
-      if (currentY < minScrollY.current) {
+      if (minScrollY.current !== null && currentY < minScrollY.current) {
         scrollViewRef.current?.scrollTo({
           y: minScrollY.current,
           animated: false,
         });
+        return;
+      }
+
+      // Find whichever week header has scrolled past the top edge —
+      // that becomes the "active" week shown in the sticky banner.
+      let candidateId: string | undefined;
+      let candidateOffset = -Infinity;
+
+      for (const [weekId, offset] of Object.entries(
+        weekOffsets.current
+      )) {
+        if (
+          offset <= currentY + SCROLL_TOP_PADDING &&
+          offset > candidateOffset
+        ) {
+          candidateOffset = offset;
+          candidateId = weekId;
+        }
+      }
+
+      if (candidateId && candidateId !== activeWeekId) {
+        setActiveWeekId(candidateId);
       }
     },
-    []
+    [activeWeekId]
   );
 
-  // Running total so left/right alternation flows continuously across weeks.
   let runningPosition = 0;
 
   return (
     <View style={styles.container}>
+      {activeWeek && (
+        <View style={styles.bannerWrapper}>
+          <CurrentWorkoutCard
+            weekNumber={activeWeek.weekNumber}
+            title={activeWeek.title}
+          />
+        </View>
+      )}
+
       <Animated.ScrollView
         ref={scrollViewRef}
         showsVerticalScrollIndicator={false}
@@ -106,7 +145,6 @@ export default function Journey() {
               <View onLayout={handleWeekLayout(week.id)}>
                 <WeekSection
                   week={week}
-                  isCurrent={week.id === currentWeekId}
                   positionOffset={positionOffset}
                   onWorkoutPress={handleWorkoutPress}
                 />

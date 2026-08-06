@@ -9,10 +9,19 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
 
-  content: {
-    paddingTop: 8,
+  bannerWrapper: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
 
-    paddingBottom: 120,
+    zIndex: 10,
+  },
+
+  content: {
+    paddingTop: 98,
+
+    paddingBottom: 32,
   },
 
   weekBridge: {
