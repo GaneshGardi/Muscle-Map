@@ -4,70 +4,47 @@ import { Colors } from "@/theme/AppTheme";
 
 const styles = StyleSheet.create({
   card: {
-    marginHorizontal: 20,
-    marginTop: 14,
-
-    paddingHorizontal: 18,
-    paddingVertical: 14,
-
-    borderRadius: 20,
+    paddingHorizontal: 20,
+    paddingTop: 14,
+    paddingBottom: 16,
 
     backgroundColor: Colors.primary,
 
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    borderRadius: 22,
+
+    marginHorizontal: 10,
 
     shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.12,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.15,
     shadowRadius: 10,
 
-    elevation: 4,
+    elevation: 6,
   },
 
-  cardPressed: {
-    opacity: 0.9,
-    transform: [{ scale: 0.98 }],
+  eyebrowRow: {
+    flexDirection: "row",
+    alignItems: "center",
+
+    gap: 6,
+
+    marginBottom: 4,
   },
 
-  textContent: {
-    flex: 1,
-  },
-
-  label: {
+  eyebrow: {
     color: "rgba(255,255,255,0.85)",
 
-    fontSize: 11,
+    fontSize: 12,
     fontWeight: "800",
 
-    letterSpacing: 0.8,
-
-    marginBottom: 3,
+    letterSpacing: 1,
   },
 
   title: {
     color: Colors.surface,
 
-    fontSize: 19,
+    fontSize: 20,
     fontWeight: "800",
-  },
-
-  arrowContainer: {
-    width: 34,
-    height: 34,
-
-    borderRadius: 17,
-
-    alignItems: "center",
-    justifyContent: "center",
-
-    backgroundColor: "rgba(255,255,255,0.18)",
-
-    marginLeft: 12,
   },
 });
 
