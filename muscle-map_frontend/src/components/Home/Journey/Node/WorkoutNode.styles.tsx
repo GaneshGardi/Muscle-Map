@@ -2,10 +2,10 @@ import { StyleSheet } from "react-native";
 
 import { Colors } from "@/theme/AppTheme";
 
-export const NODE_SIZE = 52;
-export const NODE_SPACING = 74;
-export const SIDE_PADDING = 48;
-export const NODE_CONTAINER_WIDTH = 84;
+export const NODE_SIZE = 57;
+export const NODE_SPACING = 62;
+export const SIDE_PADDING = 87;
+export const NODE_CONTAINER_WIDTH = 90;
 
 const styles = StyleSheet.create({
   wrapper: {
