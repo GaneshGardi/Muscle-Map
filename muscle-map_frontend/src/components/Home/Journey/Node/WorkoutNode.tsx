@@ -1,17 +1,10 @@
-import React from "react";
+import { Check, Dumbbell, Leaf, Lock } from "lucide-react-native";
 import { Pressable, Text, View } from "react-native";
-import {
-  Check,
-  Dumbbell,
-  Leaf,
-  Lock,
-} from "lucide-react-native";
 
 import { Colors } from "@/theme/AppTheme";
 
 import type {
-  WorkoutData,
-  WorkoutState,
+  WorkoutData
 } from "@/components/Home/Data/journeyData";
 
 import styles from "./WorkoutNode.styles";
@@ -39,40 +32,18 @@ export default function WorkoutNode({
   const renderIcon = () => {
     switch (state) {
       case "completed":
-        return (
-          <Check
-            size={28}
-            color={Colors.surface}
-            strokeWidth={3.2}
-          />
-        );
+        return <Check size={28} color={Colors.surface} strokeWidth={3.2} />;
 
       case "current":
-        return (
-          <Dumbbell
-            size={27}
-            color={Colors.surface}
-            strokeWidth={2.7}
-          />
-        );
+        return <Dumbbell size={27} color={Colors.surface} strokeWidth={2.7} />;
 
       case "rest":
-        return (
-          <Leaf
-            size={27}
-            color={Colors.surface}
-            strokeWidth={2.6}
-          />
-        );
+        return <Leaf size={27} color={Colors.surface} strokeWidth={2.6} />;
 
       case "locked":
       default:
         return (
-          <Lock
-            size={25}
-            color={Colors.textSecondary}
-            strokeWidth={2.6}
-          />
+          <Lock size={25} color={Colors.textSecondary} strokeWidth={2.6} />
         );
     }
   };
@@ -81,13 +52,9 @@ export default function WorkoutNode({
     <View
       style={[
         styles.wrapper,
-        position % 2 === 0
-          ? styles.leftPosition
-          : styles.rightPosition,
+        position % 2 === 0 ? styles.leftPosition : styles.rightPosition,
       ]}
     >
-      {!isLast && <View style={styles.connector} />}
-
       <Pressable
         disabled={isLocked}
         onPress={onPress}
@@ -123,12 +90,7 @@ export default function WorkoutNode({
             D{day}
           </Text>
 
-          <Text
-            style={[
-              styles.title,
-              isLocked && styles.lockedText,
-            ]}
-          >
+          <Text style={[styles.title, isLocked && styles.lockedText]}>
             {title}
           </Text>
         </View>

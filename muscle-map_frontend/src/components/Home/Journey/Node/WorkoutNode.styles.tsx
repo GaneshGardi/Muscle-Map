@@ -2,8 +2,10 @@ import { StyleSheet } from "react-native";
 
 import { Colors } from "@/theme/AppTheme";
 
-const NODE_SIZE = 62;
-const NODE_SPACING = 96;
+export const NODE_SIZE = 52;
+export const NODE_SPACING = 74;
+export const SIDE_PADDING = 48;
+export const NODE_CONTAINER_WIDTH = 84;
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -19,19 +21,19 @@ const styles = StyleSheet.create({
   leftPosition: {
     alignItems: "flex-start",
 
-    paddingLeft: 56,
+    paddingLeft: SIDE_PADDING,
   },
 
   rightPosition: {
     alignItems: "flex-end",
 
-    paddingRight: 56,
+    paddingRight: SIDE_PADDING,
   },
 
   nodeContainer: {
     alignItems: "center",
 
-    width: 92,
+    width: NODE_CONTAINER_WIDTH,
 
     zIndex: 2,
   },
@@ -47,77 +49,59 @@ const styles = StyleSheet.create({
 
     backgroundColor: Colors.surface,
 
-    borderWidth: 2.5,
+    borderWidth: 2,
     borderColor: Colors.border,
 
     shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowRadius: 3,
 
-    elevation: 4,
+    elevation: 3,
   },
 
   completed: {
     backgroundColor: Colors.success,
-
     borderColor: Colors.success,
-
     shadowOpacity: 0.15,
   },
 
   current: {
     backgroundColor: Colors.primary,
-
     borderColor: Colors.primary,
-
     shadowOpacity: 0.2,
-
-    elevation: 7,
+    elevation: 6,
   },
 
   rest: {
     backgroundColor: Colors.success,
-
     borderColor: Colors.success,
   },
 
   locked: {
     backgroundColor: Colors.surface,
-
     borderColor: Colors.border,
-
-    shadowOpacity: 0.04,
-
+    shadowOpacity: 0.03,
     elevation: 1,
   },
 
   labelContainer: {
     alignItems: "center",
-
-    marginTop: 6,
+    marginTop: 5,
   },
 
   day: {
     color: Colors.primary,
-
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: "900",
-
-    lineHeight: 14,
+    lineHeight: 13,
   },
 
   title: {
     color: Colors.text,
-
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: "700",
-
-    lineHeight: 15,
-
+    lineHeight: 14,
     marginTop: 1,
   },
 
@@ -129,24 +113,8 @@ const styles = StyleSheet.create({
     color: Colors.textSecondary,
   },
 
-  connector: {
-    position: "absolute",
-
-    top: NODE_SIZE / 2,
-
-    width: 3,
-    height: NODE_SPACING,
-
-    backgroundColor: Colors.border,
-
-    opacity: 0.75,
-
-    zIndex: 0,
-  },
-
   pressed: {
     transform: [{ scale: 0.94 }],
-
     opacity: 0.88,
   },
 });
