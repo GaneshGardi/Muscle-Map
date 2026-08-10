@@ -16,7 +16,10 @@ const Colors = {
   warning: "#F5B942",
   danger: "#EB5757",
 
+  
   border: "#ECECEC",
+  border1: "#e0d2d2",
+  
 
   road: "#E8E6E1",
 

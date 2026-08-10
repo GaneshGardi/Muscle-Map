@@ -4,7 +4,7 @@ import { Colors } from "@/theme/AppTheme";
 
 const styles = StyleSheet.create({
   container: {
-    height: 72,
+    height: 60,
 
     paddingHorizontal: 20,
 

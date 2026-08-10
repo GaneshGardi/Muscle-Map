@@ -16,12 +16,13 @@ const styles = StyleSheet.create({
     right: 0,
 
     zIndex: 10,
+
   },
 
   content: {
     paddingTop: 98,
 
-    paddingBottom: 32,
+    paddingBottom: 10,
   },
 
   weekBridge: {
